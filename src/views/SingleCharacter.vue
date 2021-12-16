@@ -14,6 +14,10 @@
     </div>
 
     <h2 class="mt-4 text-lg">Description</h2>
+    <div v-for="(content, title) in character.description" class="mt-2">
+      <h3>{{title}}</h3>
+      {{content}}
+    </div>
 
     <button class="button absolute top-2 right-2">Edit</button>
 
