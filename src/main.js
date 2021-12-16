@@ -11,3 +11,4 @@ new Vue({
   store,
   render: function (h) { return h(App) }
 }).$mount('#app')
+store.dispatch("bindTodosRef")
