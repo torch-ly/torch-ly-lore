@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import CampaignHome from '../views/CampaignHome.vue'
 import Login from "../views/Login";
+import Character from "../views/Characters";
+import SingleCharacter from "../views/SingleCharacter";
 
 Vue.use(VueRouter)
 
@@ -11,6 +13,16 @@ const routes = [
         path: '/',
         name: 'Home',
         component: Home,
+    },
+    {
+        path: "/w/:campaign/char/:id",
+        name: "Character Overview",
+        component: SingleCharacter,
+    },
+    {
+        path: "/w/:campaign/characters",
+        name: "Character Overview",
+        component: Character,
     },
     {
         path: '/w/:campaign',

@@ -9,6 +9,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         campaign: [],
+        npcs: [],
         user: null,
         isLoggedIn: false
     },
@@ -27,9 +28,11 @@ export default new Vuex.Store({
         ...vuexfireMutations
     },
     actions: {
-        bindTodosRef: firestoreAction(({ bindFirestoreRef }) => {
-            console.log(router.currentRoute.params)
+        bindCampaign: firestoreAction(({ bindFirestoreRef }) => {
             return bindFirestoreRef('campaign', db.collection('campaigns').doc(router.currentRoute.params.campaign))
+        }),
+        bindNPCs: firestoreAction(({ bindFirestoreRef }) => {
+            return bindFirestoreRef('npcs', db.collection('campaigns').doc(router.currentRoute.params.campaign).collection('npcs'))
         }),
         handleLogin(context) {
             auth.onAuthStateChanged(async user => {
