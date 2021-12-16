@@ -11,7 +11,7 @@ export const uiConfig = {
     signInFlow: 'popup',
     callbacks: {
         signInSuccessWithAuthResult() {
-            //router.push("/dashboard");
+            router.push("/");
         }
     }
 };
