@@ -15,7 +15,7 @@ const routes = [
         component: Home,
     },
     {
-        path: "/w/:campaign/char/:id",
+        path: "/:mode/:campaign/char/:id",
         name: "Character Overview",
         component: SingleCharacter,
     },
