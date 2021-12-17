@@ -14,6 +14,8 @@ new Vue({
   render: function (h) { return h(App) }
 }).$mount('#app')
 
+console.log(1, process.env.VUE_)
+
 store.dispatch("bindCampaign")
 store.dispatch("bindNPCs")
 
