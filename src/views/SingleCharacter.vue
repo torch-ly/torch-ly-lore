@@ -20,11 +20,12 @@
     </SideCart>
 
     <h2 class="mt-8 text-lg">Description</h2>
-    <div v-for="(content, title) in character.description" class="mt-2">
+    <div v-for="(content, title) in description" class="mt-2">
       <h3 :contenteditable="editMode" @keydown.enter.prevent
           @blur="onDescriptionTitleChange($event.target.innerText, title)">{{ title }}</h3>
-      <div :contenteditable="editMode"
-            @blur="onDescriptionContentChange($event.target.innerText, title)">{{ content }}</div>
+
+      <textarea class="p-2" :contenteditable="editMode"
+                @blur="onDescriptionContentChange(title)" v-model="description[title]"/>
 
     </div>
 
@@ -42,6 +43,18 @@ import router from "../router";
 
 export default {
   components: {SideCart},
+  data() {
+    return {
+      description: {},
+    }
+  },
+  watch: {
+    character: function (character) {
+      if (character) {
+        this.description = character.description;
+      }
+    }
+  },
   computed: {
     character() {
       return this.$store.state.npcs.find(npc => npc.id === this.$route.params.id);
@@ -55,6 +68,7 @@ export default {
   },
   methods: {
     editCharacter() {
+      console.log(this.character)
       this.$router.push({
         name: "Character Overview",
         params: {mode: "e"}
@@ -81,11 +95,11 @@ export default {
       delete description[oldIdentifier];
       this.dbRef.update({description});
     },
-    onDescriptionContentChange(newText, identifier) {
+    onDescriptionContentChange(identifier) {
       this.dbRef.update({
         description: {
-          ...this.character.description,
-          [identifier]: newText
+          ...this.description,
+          [identifier]: this.description[identifier].replace(/^\s+|\s+$/g, "")
         }
       });
     }
