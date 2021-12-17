@@ -3,8 +3,7 @@
     <button v-if="!editMode" class="button float-right inline-block" @click="editCharacter">Edit</button>
     <button v-else class="button float-right inline-block bg-green-400" @click="exitEditCharacter">Stop Edit</button>
 
-    <h1 :contenteditable="editMode" @keydown.enter.prevent @blur="onNameChange" class="mb-4 p-2">
-      {{ character.name }}</h1>
+    <SingleLineEdit :editMode="editMode" @focusLost="onNameChange" v-model="character.name" class="h1 mb-4"/>
 
     <SideCart class="mt-4">
       <div class="mt-2">
@@ -13,31 +12,32 @@
             :class="character.alive ? 'text-green-500' : 'text-red-500'">{{ character.alive ? "Alive" : "Dead" }}</span>
       </div>
 
-      <div class="mt-2" v-for="(info, index) in character.quickinfo">
-        <span :contenteditable="editMode" @keydown.enter.prevent
-              @blur="onInfoTitleChange($event.target.innerText, index)">{{ info.title }}</span>:
-        <span :contenteditable="editMode" @keydown.enter.prevent
-              @blur="onInfoContentChange($event.target.innerText, index)">{{ info.content }}</span>
+      <div class="mt-2 flex" v-for="info in character.quickinfo">
+
+        <SingleLineEdit class="pl-0" :editMode="editMode" @focusLost="onQuickInfoChange" v-model="info.title"/>
+        <span class="py-2">:</span>
+        <SingleLineEdit :editMode="editMode" @focusLost="onQuickInfoChange" v-model="info.content"/>
+
       </div>
 
-      <div v-if="editMode" @click="addQuickInfo" class="py-2 mt-4 border-4 border-accent border-dashed rounded flex justify-center items-center">
+      <div v-if="editMode" @click="addQuickInfo"
+           class="py-2 mt-4 border-4 border-accent border-dashed rounded flex justify-center items-center">
         <font-awesome-icon class="inline-block text-text-dark" icon="plus"/>
       </div>
 
     </SideCart>
 
     <h2 class="mt-8 text-lg p-2">Description</h2>
-    <div v-for="(description, index) in character.description" class="mt-2">
-      <h3 :contenteditable="editMode" @keydown.enter.prevent class="p-2"
-          @blur="onDescriptionTitleChange($event.target.innerText, index)">{{ description.title }}</h3>
+    <div v-for="description in character.description" class="mt-2">
 
-      <MultilineTextEdit v-if="editMode" @focusLost="onDescriptionContentChange(index)" v-model="character.description[index].content"/>
+      <SingleLineEdit class="h3" :editMode="editMode" @focusLost="onDescriptionChange" v-model="description.title"/>
 
-      <pre v-else class="p-2 mt-1 w-2/3">{{ character.description[index].content }}</pre>
+      <MultilineTextEdit :editMode="editMode" @focusLost="onDescriptionChange" v-model="description.content"/>
 
     </div>
 
-    <div v-if="editMode" @click="addDescriptionField" class="w-2/3 py-2 mt-4 border-4 border-dashed rounded flex justify-center items-center">
+    <div v-if="editMode" @click="addDescriptionField"
+         class="w-2/3 py-2 mt-4 border-4 border-dashed rounded flex justify-center items-center">
       <font-awesome-icon class="inline-block text-text-dark" icon="plus"/>
     </div>
 
@@ -49,9 +49,10 @@ import SideCart from "../components/View/SideCard";
 import {db} from "../plugins/firebase";
 import router from "../router";
 import MultilineTextEdit from "../components/MultilineTextEdit";
+import SingleLineEdit from "../components/SingleLineEdit";
 
 export default {
-  components: {MultilineTextEdit, SideCart},
+  components: {SingleLineEdit, MultilineTextEdit, SideCart},
   computed: {
     character() {
       return this.$store.state.npcs.find(npc => npc.id === this.$route.params.id);
@@ -76,19 +77,12 @@ export default {
         params: {mode: "w"}
       });
     },
-    onNameChange({target: {innerText}}) {
+    onNameChange() {
       this.dbRef.update({
-        name: innerText
+        name: this.character.name
       });
     },
-    onDescriptionTitleChange(newTitle, index) {
-
-      let description = [...this.character.description];
-      description[index].title = newTitle;
-
-      this.dbRef.update({description});
-    },
-    onDescriptionContentChange(identifier) {
+    onDescriptionChange() {
       this.dbRef.update({description: this.character.description});
     },
     addDescriptionField() {
@@ -123,29 +117,22 @@ export default {
         ]
       });
     },
-    onInfoTitleChange(newTitle, index) {
-      let quickinfo = [...this.character.quickinfo];
-      quickinfo[index].title = newTitle;
-
-      this.dbRef.update({quickinfo});
-    },
-    onInfoContentChange(newContent, index) {
-      let quickinfo = [...this.character.quickinfo];
-      quickinfo[index].content = newContent;
-
-      this.dbRef.update({quickinfo});
+    onQuickInfoChange() {
+      this.dbRef.update({quickinfo: this.character.quickinfo});
     }
   },
 }
 </script>
 <style scoped>
-h1 {
+.h1 {
   @apply text-3xl font-semibold wFit pr-20;
 }
-h2 {
+
+.h2 {
   @apply text-xl font-bold wFit pr-20;
 }
-h3 {
+
+.h3 {
   @apply text-lg font-bold wFit pr-20;
 }
 

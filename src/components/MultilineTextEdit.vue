@@ -1,11 +1,15 @@
 <template>
   <div>
-    <textarea class="p-2 mt-1 w-2/3 border"
+    <textarea v-if="editMode"
+              class="p-2 mt-1 w-2/3 border"
               @input="setHeight"
               ref="textarea"
               v-model="content"
               @blur="updateData() & $emit('focusLost')"
     />
+
+    <pre v-else class="p-2 mt-1 w-2/3">{{ content }}</pre>
+
   </div>
 </template>
 <script>
@@ -14,7 +18,11 @@ export default {
     value: {
       type: String,
       default: ''
-    }
+    },
+    editMode: {
+      type: Boolean,
+      default: false
+    },
   },
   data () {
     return {
@@ -30,7 +38,9 @@ export default {
     }
   },
   mounted() {
-    this.setHeight();
+    this.$nextTick(() => {
+      this.setHeight();
+    });
   }
 }
 </script>
