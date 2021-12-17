@@ -16,7 +16,7 @@
         </div>
 
         <div class="absolute right-2 bottom-2 flex">
-          <button class="button bg-green-400">Edit</button> <!-- Hide if this button can not be edited -->
+          <router-link :to="'/e/' + $store.state.campaign.id + '/char/' + char.id" class="button bg-green-400">Edit</router-link> <!-- Hide if this button can not be edited -->
           <router-link :to="'/w/' + $store.state.campaign.id + '/char/' + char.id" class="ml-2 button">View</router-link>
         </div>
 
