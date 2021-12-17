@@ -1,7 +1,7 @@
 <template>
   <div class="m-2 relative p-6" v-if="character">
-    <button v-if="!editMode" class="button float-right inline-block" @click="editCharacter">Edit</button>
-    <button v-else class="button float-right inline-block bg-green-400" @click="exitEditCharacter">Stop Edit</button>
+    <button v-if="!editMode" class="button float-right inline-block" @click="setEditMode(true)">Edit</button>
+    <button v-else class="button float-right inline-block bg-green-400" @click="setEditMode(false)">Stop Edit</button>
 
     <SingleLineEdit :editMode="editMode" @focusLost="onNameChange" v-model="character.name" class="h1 mb-4"/>
 
@@ -59,16 +59,10 @@ export default {
     }
   },
   methods: {
-    editCharacter() {
+    setEditMode(mode) {
       this.$router.push({
         name: "Character Overview",
-        params: {mode: "e"}
-      });
-    },
-    exitEditCharacter() {
-      this.$router.push({
-        name: "Character Overview",
-        params: {mode: "w"}
+        params: {mode: mode ? 'e' : 'w'}
       });
     },
     onNameChange() {
@@ -118,7 +112,7 @@ export default {
   @apply text-3xl font-semibold pr-20;
 }
 
-.h2 {
+h2 {
   @apply text-xl font-bold pr-20;
 }
 
