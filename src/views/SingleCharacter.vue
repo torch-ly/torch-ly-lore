@@ -120,14 +120,14 @@ export default {
 </script>
 <style scoped>
 .h1 {
-  @apply text-3xl font-semibold wFit pr-20;
+  @apply text-3xl font-semibold pr-20;
 }
 
 .h2 {
-  @apply text-xl font-bold wFit pr-20;
+  @apply text-xl font-bold pr-20;
 }
 
 .h3 {
-  @apply text-lg font-bold wFit pr-20;
+  @apply text-lg font-bold pr-20;
 }
 </style>
