@@ -3,7 +3,7 @@
     <button v-if="!editMode" class="button float-right inline-block" @click="editCharacter">Edit</button>
     <button v-else class="button float-right inline-block bg-green-400" @click="exitEditCharacter">Stop Edit</button>
 
-    <h1 :contenteditable="editMode" @keydown.enter.prevent @blur="onNameChange" class="text-3xl mb-4 font-semibold">
+    <h1 :contenteditable="editMode" @keydown.enter.prevent @blur="onNameChange" class="mb-4 p-2">
       {{ character.name }}</h1>
 
     <SideCart class="mt-4">
@@ -19,13 +19,18 @@
       </div>
     </SideCart>
 
-    <h2 class="mt-8 text-lg">Description</h2>
+    <h2 class="mt-8 text-lg p-2">Description</h2>
     <div v-for="(content, title) in character.description" class="mt-2">
-      <h3 :contenteditable="editMode" @keydown.enter.prevent
+      <h3 :contenteditable="editMode" @keydown.enter.prevent class="p-2"
           @blur="onDescriptionTitleChange($event.target.innerText, title)">{{ title }}</h3>
 
-      <textarea class="p-2" :contenteditable="editMode"
-                @blur="onDescriptionContentChange(title)" v-model="character.description[title]"/>
+      <div v-if="editMode">
+        <textarea class="p-2 mt-1 w-2/3 border" :ref="'description' + title" oninput="this.style.height = '';this.style.height = scrollHeight + 'px'"
+                  @blur="onDescriptionContentChange(title)" v-model="character.description[title]"/>
+        {{ setInitialHight('description' + title) }}
+      </div>
+
+      <pre v-else class="p-2 mt-1 w-2/3">{{ character.description[title] }}</pre>
 
     </div>
 
@@ -90,7 +95,28 @@ export default {
           [identifier]: this.character.description[identifier].replace(/^\s+|\s+$/g, "")
         }
       });
+    },
+    setInitialHight(ref) {
+      setTimeout(() => {
+        this.$refs[ref][0].style.height = this.$refs[ref][0].scrollHeight + "px";
+      },100);
     }
   },
 }
 </script>
+<style scoped>
+h1 {
+  @apply text-3xl font-semibold wFit pr-20;
+}
+h2 {
+  @apply text-xl font-bold wFit pr-20;
+}
+h3 {
+  @apply text-lg font-bold wFit pr-20;
+}
+
+.wFit {
+  width: fit-content;
+}
+
+</style>

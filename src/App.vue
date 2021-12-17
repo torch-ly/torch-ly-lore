@@ -15,3 +15,9 @@ export default {
   components: {NavBarLeft, NavBar}
 }
 </script>
+
+<style>
+pre {
+  @apply font-sans !important;
+}
+</style>
