@@ -8,15 +8,22 @@
 
     <SideCart class="mt-4">
       <div class="mt-2">
-        <span>Status: </span>
+        <span>Status : </span>
         <span
             :class="character.alive ? 'text-green-500' : 'text-red-500'">{{ character.alive ? "Alive" : "Dead" }}</span>
       </div>
 
-      <div class="mt-2">
-        <span>Race: </span>
-        <span>{{ character.race }}</span>
+      <div class="mt-2" v-for="(info, index) in character.quickinfo">
+        <span :contenteditable="editMode" @keydown.enter.prevent
+              @blur="onInfoTitleChange($event.target.innerText, index)">{{ info.title }}</span>:
+        <span :contenteditable="editMode" @keydown.enter.prevent
+              @blur="onInfoContentChange($event.target.innerText, index)">{{ info.content }}</span>
       </div>
+
+      <div v-if="editMode" @click="addQuickInfo" class="py-2 mt-4 border-4 border-accent border-dashed rounded flex justify-center items-center">
+        <font-awesome-icon class="inline-block text-text-dark" icon="plus"/>
+      </div>
+
     </SideCart>
 
     <h2 class="mt-8 text-lg p-2">Description</h2>
@@ -99,6 +106,34 @@ export default {
           }
         ]
       });
+    },
+    addQuickInfo() {
+
+      if (!this.character.quickinfo) {
+        this.character.quickinfo = [];
+      }
+
+      this.dbRef.update({
+        quickinfo: [
+          ...this.character.quickinfo,
+          {
+            title: "Info",
+            content: "Content"
+          }
+        ]
+      });
+    },
+    onInfoTitleChange(newTitle, index) {
+      let quickinfo = [...this.character.quickinfo];
+      quickinfo[index].title = newTitle;
+
+      this.dbRef.update({quickinfo});
+    },
+    onInfoContentChange(newContent, index) {
+      let quickinfo = [...this.character.quickinfo];
+      quickinfo[index].content = newContent;
+
+      this.dbRef.update({quickinfo});
     }
   },
 }
