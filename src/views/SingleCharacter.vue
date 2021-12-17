@@ -30,7 +30,7 @@
 
     </div>
 
-    <div v-if="editMode" class="w-2/3 py-2 mt-4 border-4 border-dashed rounded flex justify-center items-center">
+    <div v-if="editMode" @click="addDescriptionField" class="w-2/3 py-2 mt-4 border-4 border-dashed rounded flex justify-center items-center">
       <font-awesome-icon class="inline-block text-text-dark" icon="plus"/>
     </div>
 
@@ -91,6 +91,14 @@ export default {
         description: {
           ...this.character.description,
           [identifier]: this.character.description[identifier].replace(/^\s+|\s+$/g, "")
+        }
+      });
+    },
+    addDescriptionField() {
+      this.dbRef.update({
+        description: {
+          ...this.character.description,
+          ['New Field']: "Write new description here"
         }
       });
     }
