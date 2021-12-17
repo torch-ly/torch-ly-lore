@@ -1,5 +1,5 @@
 <template>
-  <div class="m-2 relative">
+  <div class="m-2 relative" v-if="character">
     <h1 class="text-3xl underline">{{ character.name }}</h1>
 
     <h2 class="mt-4 text-lg">Quick Information</h2>
