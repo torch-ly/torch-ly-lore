@@ -3,7 +3,7 @@
 @tailwind components;
 
 .button {
-    @apply bg-red-700 bg-accent px-3 py-1 rounded-sm text-sm font-bold uppercase
+    @apply bg-red-700 bg-accent px-3 py-1 rounded-sm text-sm font-bold uppercase select-none
 }
 
 @tailwind utilities;
