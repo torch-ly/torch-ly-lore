@@ -41,7 +41,6 @@
       <font-awesome-icon class="inline-block text-text-dark" icon="plus"/>
     </div>
 
-
   </div>
 </template>
 <script>
@@ -78,15 +77,12 @@ export default {
       });
     },
     onNameChange() {
-      this.dbRef.update({
-        name: this.character.name
-      });
+      this.dbRef.update({name: this.character.name});
     },
     onDescriptionChange() {
       this.dbRef.update({description: this.character.description});
     },
     addDescriptionField() {
-
       if (!this.character.description) {
         this.character.description = [];
       }
@@ -102,7 +98,6 @@ export default {
       });
     },
     addQuickInfo() {
-
       if (!this.character.quickinfo) {
         this.character.quickinfo = [];
       }
@@ -135,9 +130,4 @@ export default {
 .h3 {
   @apply text-lg font-bold wFit pr-20;
 }
-
-.wFit {
-  width: fit-content;
-}
-
 </style>
