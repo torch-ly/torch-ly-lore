@@ -30,10 +30,16 @@
   </div>
 </template>
 <script>
+import {db} from "../../plugins/firebase";
+import router from "../../router";
+
 export default {
   methods: {
     newCharacter() {
-      // TODO
+      db.collection('campaigns').doc(router.currentRoute.params.campaign).collection('npcs').doc().set({
+        name: 'New Character',
+        alive: true,
+      })
     },
     getRaces(character) {
       if (!character || !character.quickinfo) return null;
