@@ -1,30 +1,33 @@
 <template>
-  <div class="m-2 relative" v-if="character">
-    <h1 class="text-3xl underline">{{ character.name }}</h1>
+  <div class="m-2 relative p-6" v-if="character">
+    <button class="button float-right inline-block">Edit</button>
+    <h1 class="text-3xl mb-4 font-semibold">{{ character.name }}</h1>
 
-    <h2 class="mt-4 text-lg">Quick Information</h2>
-    <div class="mt-2">
-      <span>Status: </span>
-      <span :class="character.alive ? 'text-green-500' : 'text-red-500'">{{character.alive ? "Alive" : "Dead"}}</span>
-    </div>
+    <SideCart class="mt-4">
+        <div class="mt-2">
+          <span>Status: </span>
+          <span :class="character.alive ? 'text-green-500' : 'text-red-500'">{{character.alive ? "Alive" : "Dead"}}</span>
+        </div>
 
-    <div>
-      <span>Race: </span>
-      <span>{{character.race}}</span>
-    </div>
+        <div class="mt-2">
+          <span>Race: </span>
+          <span>{{character.race}}</span>
+        </div>
+    </SideCart>
 
-    <h2 class="mt-4 text-lg">Description</h2>
+    <h2 class="mt-8 text-lg">Description</h2>
     <div v-for="(content, title) in character.description" class="mt-2">
       <h3>{{title}}</h3>
       {{content}}
     </div>
 
-    <button class="button absolute top-2 right-2">Edit</button>
 
   </div>
 </template>
 <script>
+import SideCart from "../components/View/SideCard";
 export default {
+  components: {SideCart},
   computed: {
     character() {
       return this.$store.state.npcs.find(npc => npc.id === this.$route.params.id);
