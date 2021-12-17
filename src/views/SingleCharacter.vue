@@ -20,13 +20,13 @@
     </SideCart>
 
     <h2 class="mt-8 text-lg p-2">Description</h2>
-    <div v-for="(content, title) in character.description" class="mt-2">
+    <div v-for="(description, index) in character.description" class="mt-2">
       <h3 :contenteditable="editMode" @keydown.enter.prevent class="p-2"
-          @blur="onDescriptionTitleChange($event.target.innerText, title)">{{ title }}</h3>
+          @blur="onDescriptionTitleChange($event.target.innerText, index)">{{ description.title }}</h3>
 
-      <MultilineTextEdit v-if="editMode" @focusLost="onDescriptionContentChange(title)" v-model="character.description[title]"/>
+      <MultilineTextEdit v-if="editMode" @focusLost="onDescriptionContentChange(index)" v-model="character.description[index].content"/>
 
-      <pre v-else class="p-2 mt-1 w-2/3">{{ character.description[title] }}</pre>
+      <pre v-else class="p-2 mt-1 w-2/3">{{ character.description[index].content }}</pre>
 
     </div>
 
@@ -74,30 +74,30 @@ export default {
         name: innerText
       });
     },
-    onDescriptionTitleChange(newIdentifier, oldIdentifier) {
-      if (newIdentifier === oldIdentifier) return;
+    onDescriptionTitleChange(newTitle, index) {
 
-      let description = {
-        [newIdentifier]: this.character.description[oldIdentifier],
-        ...this.character.description,
-      };
-      delete description[oldIdentifier];
+      let description = [...this.character.description];
+      description[index].title = newTitle;
+
       this.dbRef.update({description});
     },
     onDescriptionContentChange(identifier) {
-      this.dbRef.update({
-        description: {
-          ...this.character.description,
-          [identifier]: this.character.description[identifier].replace(/^\s+|\s+$/g, "")
-        }
-      });
+      this.dbRef.update({description: this.character.description});
     },
     addDescriptionField() {
+
+      if (!this.character.description) {
+        this.character.description = [];
+      }
+
       this.dbRef.update({
-        description: {
+        description: [
           ...this.character.description,
-          ['New Field']: "Write new description here"
-        }
+          {
+            title: "New Description",
+            content: "Write your text here!"
+          }
+        ]
       });
     }
   },
