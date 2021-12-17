@@ -20,10 +20,7 @@
 
       </div>
 
-      <div v-if="editMode" @click="addQuickInfo"
-           class="py-2 mt-4 border-4 border-accent border-dashed rounded flex justify-center items-center">
-        <font-awesome-icon class="inline-block text-text-dark" icon="plus"/>
-      </div>
+      <PlusBox v-if="editMode" class="mt-4 border-accent" @click="addQuickInfo"/>
 
     </SideCart>
 
@@ -36,10 +33,7 @@
 
     </div>
 
-    <div v-if="editMode" @click="addDescriptionField"
-         class="w-2/3 py-2 mt-4 border-4 border-dashed rounded flex justify-center items-center">
-      <font-awesome-icon class="inline-block text-text-dark" icon="plus"/>
-    </div>
+    <PlusBox v-if="editMode" class="w-2/3 mt-4" @click="addDescriptionField"/>
 
   </div>
 </template>
@@ -49,9 +43,10 @@ import {db} from "../plugins/firebase";
 import router from "../router";
 import MultilineTextEdit from "../components/MultilineTextEdit";
 import SingleLineEdit from "../components/SingleLineEdit";
+import PlusBox from "../components/PlusBox";
 
 export default {
-  components: {SingleLineEdit, MultilineTextEdit, SideCart},
+  components: {PlusBox, SingleLineEdit, MultilineTextEdit, SideCart},
   computed: {
     character() {
       return this.$store.state.npcs.find(npc => npc.id === this.$route.params.id);

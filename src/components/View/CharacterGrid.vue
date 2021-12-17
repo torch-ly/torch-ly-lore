@@ -23,17 +23,17 @@
       </div>
     </div>
 
-    <div class="w-64 h-48 p-4 border-4 border-dashed tracking-[1em] border-gray-200 rounded flex justify-center items-center" @click="newCharacter">
-      <font-awesome-icon size="4x" class="mt-1 mr-2" icon="plus" />
-    </div>
+    <PlusBox @click="newCharacter" class="w-64 h-48 p-4"/>
 
   </div>
 </template>
 <script>
 import {db} from "../../plugins/firebase";
 import router from "../../router";
+import PlusBox from "../PlusBox";
 
 export default {
+  components: {PlusBox},
   methods: {
     newCharacter() {
       db.collection('campaigns').doc(router.currentRoute.params.campaign).collection('npcs').doc().set({
