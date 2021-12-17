@@ -16,7 +16,7 @@ const routes = [
     },
     {
         path: "/:mode/:campaign/char/:id",
-        name: "Character Overview",
+        name: "Character View",
         component: SingleCharacter,
     },
     {

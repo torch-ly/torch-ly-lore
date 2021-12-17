@@ -3,20 +3,20 @@
     <button v-if="!editMode" class="button float-right inline-block" @click="setEditMode(true)">Edit</button>
     <button v-else class="button float-right inline-block bg-green-400" @click="setEditMode(false)">Stop Edit</button>
 
-    <SingleLineEdit :editMode="editMode" @focusLost="onNameChange" v-model="character.name" class="h1 mb-4"/>
+    <SingleLineEdit :editMode="editMode" @focusLost="onNameChange" v-model="character.name" @trash="deleteCharacter" class="h1 mb-4"/>
 
     <SideCart class="mt-4">
-      <div class="mt-2">
+      <div class="mt-2 ml-2">
         <span>Status : </span>
         <span
             :class="character.alive ? 'text-green-500' : 'text-red-500'">{{ character.alive ? "Alive" : "Dead" }}</span>
       </div>
 
-      <div class="mt-2 flex" v-for="info in character.quickinfo">
+      <div class="mt-2 flex" v-for="(info, index) in character.quickinfo">
 
-        <SingleLineEdit class="pl-0" :editMode="editMode" @focusLost="onQuickInfoChange" v-model="info.title"/>
+        <SingleLineEdit noTrash :editMode="editMode" @focusLost="onQuickInfoChange" v-model="info.title"/>
         <span class="py-2">:</span>
-        <SingleLineEdit :editMode="editMode" @focusLost="onQuickInfoChange" v-model="info.content"/>
+        <SingleLineEdit :editMode="editMode" @focusLost="onQuickInfoChange" @trash="removeQuickInfo(index)" v-model="info.content"/>
 
       </div>
 
@@ -25,9 +25,9 @@
     </SideCart>
 
     <h2 class="mt-8 text-lg p-2">Description</h2>
-    <div v-for="description in character.description" class="mt-2">
+    <div v-for="(description, index) in character.description" class="mt-2">
 
-      <SingleLineEdit class="h3" :editMode="editMode" @focusLost="onDescriptionChange" v-model="description.title"/>
+      <SingleLineEdit class="h3" :editMode="editMode" @focusLost="onDescriptionChange" @trash="removeDescriptionField(index)" v-model="description.title"/>
 
       <MultilineTextEdit :editMode="editMode" @focusLost="onDescriptionChange" v-model="description.content"/>
 
@@ -68,6 +68,10 @@ export default {
     onNameChange() {
       this.dbRef.update({name: this.character.name});
     },
+    deleteCharacter() {
+      this.dbRef.delete();
+      router.push({name: "Character Overview"});
+    },
     onDescriptionChange() {
       this.dbRef.update({description: this.character.description});
     },
@@ -86,6 +90,10 @@ export default {
         ]
       });
     },
+    removeDescriptionField(index) {
+      this.character.description.splice(index, 1);
+      this.dbRef.update({description: this.character.description});
+    },
     addQuickInfo() {
       if (!this.character.quickinfo) {
         this.character.quickinfo = [];
@@ -102,6 +110,10 @@ export default {
       });
     },
     onQuickInfoChange() {
+      this.dbRef.update({quickinfo: this.character.quickinfo});
+    },
+    removeQuickInfo(index) {
+      this.character.quickinfo.splice(index, 1);
       this.dbRef.update({quickinfo: this.character.quickinfo});
     }
   },
