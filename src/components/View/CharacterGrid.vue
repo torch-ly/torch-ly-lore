@@ -10,9 +10,9 @@
           <span :class="char.alive ? 'text-green-500' : 'text-red-500'">{{char.alive ? "Alive" : "Dead"}}</span>
         </div>
 
-        <div>
+        <div v-if="getRaces(char)">
           <span>Race: </span>
-          <span>{{char.race}}</span>
+          <span>{{ getRaces(char).content }}</span>
         </div>
 
         <div class="absolute right-2 bottom-2 flex">
@@ -34,6 +34,10 @@ export default {
   methods: {
     newCharacter() {
       // TODO
+    },
+    getRaces(character) {
+      if (!character || !character.quickinfo) return null;
+      return character.quickinfo.find((info) => info.title === "Race");
     }
   }
 }
