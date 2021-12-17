@@ -58,7 +58,6 @@ export default {
   },
   methods: {
     editCharacter() {
-      console.log(this.character)
       this.$router.push({
         name: "Character Overview",
         params: {mode: "e"}
@@ -86,7 +85,6 @@ export default {
       this.dbRef.update({description});
     },
     onDescriptionContentChange(identifier) {
-      console.log(identifier, this.character.description)
       this.dbRef.update({
         description: {
           ...this.character.description,

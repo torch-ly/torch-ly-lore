@@ -23,7 +23,6 @@ export default {
   },
   methods: {
     updateData() {
-      console.log(22, this.content)
       this.$emit('input', this.content);
     },
     setHeight() {

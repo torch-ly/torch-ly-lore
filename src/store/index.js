@@ -37,7 +37,6 @@ export default new Vuex.Store({
         handleLogin(context) {
             auth.onAuthStateChanged(async user => {
                 if (user) {
-                    console.log(1, user)
                     await context.commit('setUser', user);
                     await context.commit('setLoggedInState', true);
                 } else {
