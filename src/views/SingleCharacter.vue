@@ -24,11 +24,7 @@
       <h3 :contenteditable="editMode" @keydown.enter.prevent class="p-2"
           @blur="onDescriptionTitleChange($event.target.innerText, title)">{{ title }}</h3>
 
-      <div v-if="editMode">
-        <textarea class="p-2 mt-1 w-2/3 border" :ref="'description' + title" oninput="this.style.height = '';this.style.height = scrollHeight + 'px'"
-                  @blur="onDescriptionContentChange(title)" v-model="character.description[title]"/>
-        {{ setInitialHight('description' + title) }}
-      </div>
+      <MultilineTextEdit v-if="editMode" @focusLost="onDescriptionContentChange(title)" v-model="character.description[title]"/>
 
       <pre v-else class="p-2 mt-1 w-2/3">{{ character.description[title] }}</pre>
 
@@ -45,9 +41,10 @@
 import SideCart from "../components/View/SideCard";
 import {db} from "../plugins/firebase";
 import router from "../router";
+import MultilineTextEdit from "../components/MultilineTextEdit";
 
 export default {
-  components: {SideCart},
+  components: {MultilineTextEdit, SideCart},
   computed: {
     character() {
       return this.$store.state.npcs.find(npc => npc.id === this.$route.params.id);
@@ -89,17 +86,13 @@ export default {
       this.dbRef.update({description});
     },
     onDescriptionContentChange(identifier) {
+      console.log(identifier, this.character.description)
       this.dbRef.update({
         description: {
           ...this.character.description,
           [identifier]: this.character.description[identifier].replace(/^\s+|\s+$/g, "")
         }
       });
-    },
-    setInitialHight(ref) {
-      setTimeout(() => {
-        this.$refs[ref][0].style.height = this.$refs[ref][0].scrollHeight + "px";
-      },100);
     }
   },
 }
