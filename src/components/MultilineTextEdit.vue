@@ -38,9 +38,20 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(() => {
-      this.setHeight();
-    });
+    if (this.editMode) {
+      this.$nextTick(() => {
+        this.setHeight();
+      });
+    }
+  },
+  watch: {
+    editMode() {
+      if (this.editMode) {
+        this.$nextTick(() => {
+          this.setHeight();
+        });
+      }
+    }
   }
 }
 </script>
