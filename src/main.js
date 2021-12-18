@@ -16,5 +16,6 @@ new Vue({
 
 store.dispatch("bindCampaign")
 store.dispatch("bindNPCs")
+store.dispatch("bindUsers")
 
 store.dispatch("handleLogin")

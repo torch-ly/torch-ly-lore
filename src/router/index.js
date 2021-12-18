@@ -5,6 +5,7 @@ import CampaignHome from '../views/CampaignHome.vue'
 import Login from "../views/Login";
 import Character from "../views/Characters";
 import SingleCharacter from "../views/SingleCharacter";
+import Permissions from "../views/Permissions";
 
 Vue.use(VueRouter)
 
@@ -23,6 +24,11 @@ const routes = [
         path: "/w/:campaign/characters",
         name: "Character Overview",
         component: Character,
+    },
+    {
+        path: '/w/:campaign/permissions',
+        name: 'Campaign Permissions',
+        component: Permissions
     },
     {
         path: '/w/:campaign',

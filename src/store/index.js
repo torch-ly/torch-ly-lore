@@ -11,6 +11,7 @@ export default new Vuex.Store({
         campaign: [],
         npcs: [],
         user: null,
+        users: [],
         isLoggedIn: false
     },
     mutations: {
@@ -33,6 +34,9 @@ export default new Vuex.Store({
         }),
         bindNPCs: firestoreAction(({ bindFirestoreRef }) => {
             return bindFirestoreRef('npcs', db.collection('campaigns').doc(router.currentRoute.params.campaign).collection('npcs'))
+        }),
+        bindUsers: firestoreAction(({ bindFirestoreRef }) => {
+            return bindFirestoreRef('users', db.collection('users'))
         }),
         handleLogin(context) {
             auth.onAuthStateChanged(async user => {

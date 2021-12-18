@@ -12,7 +12,10 @@
             {{$store.state.user.displayName}}
             <font-awesome-icon class="mb-1 ml-1" icon="sort-down"></font-awesome-icon>
           </div>
-          <div v-if="burgerOpen" class="absolute right-0 top-8 p-2 shadow-lg border border-gray-300 bg-gray-100 text-text-dark text-xs rounded" @click="logout">LOG OUT</div>
+          <div v-if="burgerOpen" class="absolute right-0 top-8 p-2 shadow-lg border border-gray-300 bg-gray-100 text-text-dark text-xs rounded">
+            <div @click="openPermissionsPage">Permissions</div>
+            <div class="mt-2" @click="logout">LOG OUT</div>
+          </div>
         </div>
       </div>
       <router-link to="/login" v-else class="button">Login</router-link>
@@ -32,7 +35,9 @@ export default {
     logout() {
       this.$store.commit('logout');
     },
+    openPermissionsPage() {
+      this.$router.push({name: 'Campaign Permissions'});
+    },
   },
 }
-
 </script>
