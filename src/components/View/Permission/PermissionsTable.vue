@@ -50,9 +50,6 @@ export default {
     canEditPermission() {
       return true;
     },
-    availablePermissions() {
-      return ['gm', 'Taube']
-    },
     dbRef() {
       return db.collection('campaigns').doc(router.currentRoute.params.campaign);
     },

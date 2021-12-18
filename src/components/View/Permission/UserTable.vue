@@ -18,7 +18,7 @@
         <td class="text-gray-500">
           <span v-if="!canEditPermission">{{user.permission}}</span>
           <select v-if="canEditPermission" v-model="user.permission" @change="updatePermission">
-            <option v-for="perm in availablePermissions" :value="perm" class="p-2">{{perm}}</option>
+            <option v-for="{name: perm} in campaign.permissions" :value="perm" class="p-2">{{perm}}</option>
           </select>
         </td>
         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -38,9 +38,6 @@ export default {
   computed: {
     canEditPermission() {
       return true;
-    },
-    availablePermissions() {
-      return ['gm', 'Taube']
     },
     dbRef() {
       return db.collection('campaigns').doc(router.currentRoute.params.campaign);
