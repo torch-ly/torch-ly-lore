@@ -39,6 +39,10 @@ export default {
       db.collection('campaigns').doc(router.currentRoute.params.campaign).collection('npcs').doc().set({
         name: 'New Character',
         alive: true,
+        permissions: {
+          default: 4, // Default group can view,
+
+        }
       })
     },
     getRaces(character) {

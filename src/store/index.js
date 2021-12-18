@@ -6,7 +6,7 @@ import router from "../router";
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
     state: {
         campaign: [],
         npcs: [],
@@ -51,3 +51,5 @@ export default new Vuex.Store({
         }
     },
 })
+
+export default store;

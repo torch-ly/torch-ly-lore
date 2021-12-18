@@ -1,11 +1,13 @@
 <template>
   <PermissionsSufficient v-if="character" :permissions="character.permissions" @canEdit="canEdit = $event">
     <div class="m-2 relative p-6">
-      <button v-if="!editMode" class="-mt-10 lg:mt-0 button float-right inline-block" @click="setEditMode(true)">Edit
-      </button>
-      <button v-else class="-mt-10 lg:mt-0 button float-right inline-block bg-green-400" @click="setEditMode(false)">
-        Stop Edit
-      </button>
+      <div v-if="canEdit">
+        <button v-if="!editMode" class="-mt-10 lg:mt-0 button float-right inline-block" @click="setEditMode(true)">Edit
+        </button>
+        <button v-else class="-mt-10 lg:mt-0 button float-right inline-block bg-green-400" @click="setEditMode(false)">
+          Stop Edit
+        </button>
+      </div>
 
       <SingleLineEdit :editMode="editMode" @focusLost="onNameChange" v-model="character.name" @trash="deleteCharacter"
                       class="h1 mb-4"/>
