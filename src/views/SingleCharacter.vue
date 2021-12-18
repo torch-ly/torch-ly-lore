@@ -61,7 +61,6 @@ export default {
   methods: {
     setEditMode(mode) {
       this.$router.push({
-        name: "Character Overview",
         params: {mode: mode ? 'e' : 'w'}
       });
     },
