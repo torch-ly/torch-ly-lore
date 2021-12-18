@@ -1,7 +1,7 @@
 <template>
   <div class="m-2 relative p-6" v-if="character">
-    <button v-if="!editMode" class="button float-right inline-block" @click="setEditMode(true)">Edit</button>
-    <button v-else class="button float-right inline-block bg-green-400" @click="setEditMode(false)">Stop Edit</button>
+    <button v-if="!editMode" class="-mt-10 lg:mt-0 button float-right inline-block" @click="setEditMode(true)">Edit</button>
+    <button v-else class="-mt-10 lg:mt-0 button float-right inline-block bg-green-400" @click="setEditMode(false)">Stop Edit</button>
 
     <SingleLineEdit :editMode="editMode" @focusLost="onNameChange" v-model="character.name" @trash="deleteCharacter" class="h1 mb-4"/>
 

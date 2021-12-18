@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-3 xl:grid-cols-4 gap-3">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
     <div v-for="char in $store.state.npcs">
       <div class="w-64 h-48 p-4 border border-gray-200 rounded relative">
         <span class="text-lg font-semibold">{{char.name}}</span>
