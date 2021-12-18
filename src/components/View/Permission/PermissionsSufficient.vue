@@ -1,6 +1,11 @@
 <template>
-  <div v-if="canView">
-    <slot />
+  <div class="h-full">
+    <div v-if="canView">
+      <slot/>
+    </div>
+    <div v-else class="alert alert-danger w-fill h-full flex items-center justify-center">
+      <strong>You do not have permission to view this page.</strong>
+    </div>
   </div>
 </template>
 <script>
@@ -80,10 +85,10 @@ export default {
             this.canView = true
             this.$emit('canView', true)
           }
-          if (this.permissions[perm] -4 - 2 >= 0) {
+          if (this.permissions[perm] - 4 - 2 >= 0) {
             this.$emit('canEdit', true)
           }
-          if (this.permissions[perm] -4 - 2 - 1 >= 0) {
+          if (this.permissions[perm] - 4 - 2 - 1 >= 0) {
             this.$emit('canChangePermissions', true)
           }
           if (this.permissions[perm] === 0) {
@@ -98,7 +103,7 @@ export default {
     generatePermissionTree() {
       let tree = [];
       let subperm = this.userPermission();
-      while(subperm && subperm.name !== 'default' && subperm.name !== 'gm') {
+      while (subperm && subperm.name !== 'default' && subperm.name !== 'gm') {
         tree.push(subperm.name)
         let newSubperm = this.campaignPermissions.find((perm) => perm.name === subperm.root)
         if (newSubperm) {
@@ -112,7 +117,7 @@ export default {
 
     },
     userPermission() {
-      let perm =  this.campaignUsers.find((user) => {
+      let perm = this.campaignUsers.find((user) => {
         return user.object.id === this.$store.state.user.uid
       });
 
