@@ -69,22 +69,28 @@ export default {
     hasPermission() {
       if (this.permissionsTree.includes("gm")) {
         this.canView = true;
-        this.$emit("canView");
-        this.$emit("canEdit");
-        this.$emit("canChangePermissions");
+        this.$emit("canView", true);
+        this.$emit("canEdit", true);
+        this.$emit("canChangePermissions", true);
         return;
       }
       for (let perm of this.permissionsTree) {
-        if (this.permissions[perm]) {
+        if (this.permissions[perm] !== null) {
           if (this.permissions[perm] - 4 >= 0) {
             this.canView = true
-            this.$emit('canView')
+            this.$emit('canView', true)
           }
           if (this.permissions[perm] -4 - 2 >= 0) {
-            this.$emit('canEdit')
+            this.$emit('canEdit', true)
           }
           if (this.permissions[perm] -4 - 2 - 1 >= 0) {
-            this.$emit('canChangePermissions')
+            this.$emit('canChangePermissions', true)
+          }
+          if (this.permissions[perm] === 0) {
+            this.canView = false
+            this.$emit("canView", false);
+            this.$emit("canEdit", false);
+            this.$emit("canChangePermissions", false);
           }
         }
       }

@@ -1,5 +1,5 @@
 <template>
-  <PermissionsSufficient v-if="character" :permissions="character.permissions" @canEdit="canEdit = true">
+  <PermissionsSufficient v-if="character" :permissions="character.permissions" @canEdit="canEdit = $event">
     <div class="m-2 relative p-6">
       <button v-if="!editMode" class="-mt-10 lg:mt-0 button float-right inline-block" @click="setEditMode(true)">Edit
       </button>
