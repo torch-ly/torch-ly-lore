@@ -1,6 +1,9 @@
 <template>
   <div class="flex flex-col h-screen">
     <NavBar/>
+
+    <Popup/>
+
     <div class="hidden lg:flex flex-row flex-grow">
       <NavBarLeft v-if="$store.state.campaign" class="h-full shadow-xl flex-shrink-0"/>
       <router-view class="flex-grow w-screen"/>
@@ -23,11 +26,11 @@
 <script>
 import NavBar from "./components/nav/NavBar";
 import NavBarLeft from "./components/nav/NavBarLeft";
+import Popup from "./components/Popup";
 import {generatePermissionTree, userPermission} from "./plugins/permissions";
-import store from "./store";
 
 export default {
-  components: {NavBarLeft, NavBar},
+  components: {NavBarLeft, NavBar, Popup},
   data() {
     return {
       navBarOpen: false,

@@ -43,6 +43,7 @@
 import {db} from "../../../plugins/firebase";
 import router from "../../../router";
 import SingleLineEdit from "../../SingleLineEdit";
+import {confirmationPopup} from "../../Popup";
 
 export default {
   components: {SingleLineEdit},
@@ -74,7 +75,8 @@ export default {
       });
       this.updatePermission();
     },
-    removePermission(index) {
+    async removePermission(index) {
+      if (!await confirmationPopup("Sure?", `Are you sure you want to remove permission \"${this.campaign.permissions[index].name}\"? Doing so can not be reversed!`)) return
       this.campaign.permissions.splice(index, 1);
       this.updatePermission();
     },
