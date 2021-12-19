@@ -16,9 +16,9 @@
         <td class="text-gray-800">{{user.object.name}}</td>
         <td class="text-gray-800">{{user.object.id}}</td>
         <td class="text-gray-500">
-          <span v-if="!canEditPermission">{{user.permission}}</span>
-          <select v-if="canEditPermission" v-model="user.permission" @change="updatePermission">
-            <option v-for="{name: perm} in campaign.permissions" :value="perm" class="p-2">{{perm}}</option>
+          <span v-if="!canEditPermission || user.permission === 'gm'">{{user.permission}}</span>
+          <select v-else v-model="user.permission" @change="updatePermission">
+            <option v-for="{name: perm} in campaign.permissions" v-if="perm !== 'gm'" :value="perm" class="p-2">{{perm}}</option>
           </select>
         </td>
         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

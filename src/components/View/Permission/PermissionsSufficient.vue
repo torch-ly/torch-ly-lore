@@ -3,7 +3,7 @@
     <div v-if="canView">
       <slot/>
     </div>
-    <div v-else class="alert alert-danger w-fill h-full flex items-center justify-center">
+    <div v-else class="w-fill h-full flex items-center justify-center">
       <strong>You do not have permission to view this page.</strong>
     </div>
   </div>
