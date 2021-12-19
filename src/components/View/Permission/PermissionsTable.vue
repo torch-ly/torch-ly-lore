@@ -76,7 +76,7 @@ export default {
       this.updatePermission();
     },
     async removePermission(index) {
-      if (!await confirmationPopup("Sure?", `Are you sure you want to remove permission \"${this.campaign.permissions[index].name}\"? Doing so can not be reversed!`)) return
+      if (!await confirmationPopup("Delete Permission class", `Are you sure you want to remove the permission class \"${this.campaign.permissions[index].name}\"? This action can not be reversed.`)) return
       this.campaign.permissions.splice(index, 1);
       this.updatePermission();
     },
