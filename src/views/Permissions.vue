@@ -18,24 +18,14 @@ import PermissionsTable from "../components/View/Permission/PermissionsTable";
 
 export default {
   components: {PermissionsTable, UserTable},
-  data() {
-    return {
-      canOpenPage: false,
-    }
-  },
   computed: {
     campaignName() {
       return this.$route.params.campaign;
     },
-    permissionTree() {
-      return this.$store.state.userPermissionTree;
+    canOpenPage() {
+      return this.$store.state.userPermissionTree.includes("gm");
     }
-  },
-  watch: {
-    permissionTree(newVal) {
-      this.canOpenPage = newVal.includes("gm");
-    }
-  },
+  }
 }
 </script>
 <style scoped>
