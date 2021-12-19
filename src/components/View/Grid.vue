@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 gap-y-6">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 gap-y-6">
     <div v-for="val in value" v-if="canView(val)">
       <div class="w-ful md:w-64 h-48 p-4 border border-gray-200 rounded relative">
         <span class="text-lg font-semibold">{{ val.name }}</span>
