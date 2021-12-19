@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <PlusBox @click="newCharacter" class="w-64 h-48 p-4"/>
+    <PlusBox v-if="$store.state.userPermission.name !== 'default'" @click="newCharacter" class="w-64 h-48 p-4"/>
 
   </div>
 </template>

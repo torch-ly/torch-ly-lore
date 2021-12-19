@@ -23,12 +23,36 @@
 <script>
 import NavBar from "./components/nav/NavBar";
 import NavBarLeft from "./components/nav/NavBarLeft";
+import {generatePermissionTree, userPermission} from "./plugins/permissions";
+import store from "./store";
 
 export default {
   components: {NavBarLeft, NavBar},
   data() {
     return {
       navBarOpen: false,
+    }
+  },
+  computed: {
+    permissions() {
+      return this.$store.state.campaign.permissions;
+    },
+    userPermission() {
+      return this.$store.state.campaign.users;
+    }
+  },
+  watch: {
+    userPermission(campaign) {
+      if (campaign) {
+        this.$store.commit("setUserPermission", userPermission())
+        this.$store.commit("userPermissionTree", generatePermissionTree())
+      }
+    },
+    permissions(campaign) {
+      if (campaign) {
+        this.$store.commit("setUserPermission", userPermission())
+        this.$store.commit("userPermissionTree", generatePermissionTree())
+      }
     }
   }
 }
