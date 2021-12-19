@@ -12,7 +12,7 @@
     <div class="lg:hidden relative h-full">
       <div class="absolute h-full flex flex-row flex-grow z-20" @click="navBarOpen = !navBarOpen">
         <NavBarLeft v-if="navBarOpen" class="h-full shadow-xl flex-grow"/>
-        <div class="bg-gray-700 border-2 border-black mt-2 w-12 h-12 flex justify-center items-center">
+        <div class="bg-primary-lighter border-2 border-black mt-2 w-12 h-12 flex justify-center items-center">
           <font-awesome-icon icon="bars"/>
         </div>
       </div>

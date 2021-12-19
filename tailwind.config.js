@@ -6,6 +6,7 @@ module.exports = {
       colors: {
         primary: 'rgb(12,11,36)',
         "primary-light": '#171547',
+        "primary-lighter": '#211e68',
         accent: 'rgb(247, 155, 63)',
         "accent-light": "#fce2c8",
         "text-light": '#f1f5f9',
