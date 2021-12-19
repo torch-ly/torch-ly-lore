@@ -36,15 +36,17 @@ import {hasFilePermission} from "../../plugins/permissions";
 export default {
   components: {PlusBox},
   methods: {
-    newCharacter() {
-      db.collection('campaigns').doc(router.currentRoute.params.campaign).collection('npcs').doc().set({
+    async newCharacter() {
+      let res = await db.collection('campaigns').doc(router.currentRoute.params.campaign).collection('npcs').add({
         name: 'New Character',
         alive: true,
         permissions: {
           default: 4, // Default group can view,
-
+          [this.$store.state.userPermission.name]: 7
         }
       })
+
+      await router.push('/e/' + router.currentRoute.params.campaign + '/char/' + res.id)
     },
     getRaces(character) {
       if (!character || !character.quickinfo) return null;

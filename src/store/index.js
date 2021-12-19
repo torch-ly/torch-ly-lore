@@ -12,6 +12,7 @@ const store = new Vuex.Store({
         npcs: [],
         user: null,
         users: [],
+        userPermission: 'default',
         userPermissionTree: [],
         isLoggedIn: false
     },
@@ -29,6 +30,9 @@ const store = new Vuex.Store({
         },
         userPermissionTree(state, tree) {
             state.userPermissionTree = tree;
+        },
+        setUserPermission(state, permission) {
+            state.userPermission = permission;
         },
         ...vuexfireMutations
     },

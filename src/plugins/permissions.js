@@ -6,7 +6,7 @@ export function userPermission() {
     });
 
     if (!perm) {
-        return {name: "", root: "default"};
+        return {name: "default", root: "none"};
     } else {
         perm = perm.permission;
     }
@@ -20,7 +20,7 @@ export function userPermission() {
 
 export function generatePermissionTree() {
     let tree = [];
-    let subperm = userPermission();
+    let subperm = store.state.userPermission;
     while (subperm && subperm.name !== 'default' && subperm.name !== 'gm') {
         tree.push(subperm.name)
         let newSubperm = store.state.campaign.permissions.find((perm) => perm.name === subperm.root)

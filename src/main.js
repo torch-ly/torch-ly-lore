@@ -5,7 +5,7 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 import './assets/tailwind.css'
-import {generatePermissionTree} from "./plugins/permissions";
+import {generatePermissionTree, userPermission} from "./plugins/permissions";
 
 Vue.config.productionTip = false
 
@@ -16,6 +16,7 @@ new Vue({
 }).$mount('#app')
 
 store.dispatch("bindCampaign").then(() => {
+  store.commit("setUserPermission", userPermission())
   store.commit("userPermissionTree", generatePermissionTree())
 })
 
