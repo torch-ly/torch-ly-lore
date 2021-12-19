@@ -1,7 +1,7 @@
 <template>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 gap-y-6">
     <div v-for="val in value" v-if="canView(val)">
-      <div class="w-64 h-48 p-4 border border-gray-200 rounded relative">
+      <div class="w-ful md:w-64 h-48 p-4 border border-gray-200 rounded relative">
         <span class="text-lg font-semibold">{{ val.name }}</span>
         <hr class="my-2">
 
@@ -19,7 +19,7 @@
 
       </div>
     </div>
-    <PlusBox v-if="$store.state.userPermission.name !== 'default'" @click="newFunction" class="w-64 h-48 p-4"/>
+    <PlusBox v-if="$store.state.userPermission.name !== 'default'" @click="newFunction" class="w-ful md:w-64 h-48"/>
   </div>
 </template>
 <script>
