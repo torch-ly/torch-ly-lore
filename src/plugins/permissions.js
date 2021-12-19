@@ -48,18 +48,20 @@ export function hasFilePermission(filePermission) {
         permission.canView = true;
         permission.canEdit = true;
         permission.canChangePermissions = true;
-        return;
+        return permission;
     }
 
     for (let perm of store.state.userPermissionTree) {
-        if (filePermission[perm] - 4 >= 0) {
-            permission.canView = true;
-        }
-        if (filePermission[perm] - 4 - 2 >= 0) {
-            permission.canEdit = true;
-        }
-        if (filePermission[perm] - 4 - 2 - 1 >= 0) {
-            permission.canChangePermissions = true;
+        if (filePermission[perm]) {
+            if (filePermission[perm] - 4 >= 0) {
+                permission.canView = true;
+            }
+            if (filePermission[perm] - 4 - 2 >= 0) {
+                permission.canEdit = true;
+            }
+            if (filePermission[perm] - 4 - 2 - 1 >= 0) {
+                permission.canChangePermissions = true;
+            }
         }
     }
 
