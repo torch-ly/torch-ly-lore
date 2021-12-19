@@ -9,12 +9,7 @@
   </div>
 </template>
 <script>
-
-/*
- * TODO: This is a temporary implementation. It should be replaced with a proper one!
- */
-
-import {generatePermissionTree, userPermission} from "../../../plugins/permissions";
+import {hasFilePermission} from "../../../plugins/permissions";
 
 export default {
   props: {
@@ -33,71 +28,44 @@ export default {
     campaignPermissions() {
       return this.campaign.permissions;
     },
+    permissionTree() {
+      return this.$store.state.userPermissionTree;
+    }
   },
   data() {
     return {
-      permissionsTree: [],
       canView: false
     }
   },
   mounted() {
-    this.permissionsTree = generatePermissionTree()
     this.hasPermission()
-
-    setTimeout(() => {
-      this.permissionsTree = generatePermissionTree()
-      this.hasPermission()
-    }, 100)
-
-    setTimeout(() => {
-      this.permissionsTree = generatePermissionTree()
-      this.hasPermission()
-    }, 10000)
   },
   watch: {
     permissions() {
-      this.permissionsTree = generatePermissionTree()
       this.hasPermission()
     },
     userPermission() {
-      this.permissionsTree = generatePermissionTree()
       this.hasPermission()
     },
     campaignPermissions() {
-      this.permissionsTree = generatePermissionTree()
       this.hasPermission()
     },
     campaign() {
-      this.permissionsTree = generatePermissionTree()
+      this.hasPermission()
+    },
+    permissionTree() {
       this.hasPermission()
     }
   },
   methods: {
     hasPermission() {
-      if (this.permissionsTree.includes("gm")) {
-        this.canView = true;
-        this.$emit("canView", true);
-        this.$emit("canEdit", true);
-        this.$emit("canChangePermissions", true);
-        return;
-      }
+      let filePermission = hasFilePermission(this.permissions)
 
-      this.$emit("canView", false);
-      this.$emit("canEdit", false);
-      this.$emit("canChangePermissions", false);
+      this.canView = filePermission.canView;
+      this.$emit("canView", filePermission.canView);
+      this.$emit("canEdit", filePermission.canEdit);
+      this.$emit("canChangePermissions", filePermission.canChangePermissions);
 
-      for (let perm of this.permissionsTree) {
-        if (this.permissions[perm] - 4 >= 0) {
-          this.canView = true
-          this.$emit('canView', true)
-        }
-        if (this.permissions[perm] - 4 - 2 >= 0) {
-          this.$emit('canEdit', true)
-        }
-        if (this.permissions[perm] - 4 - 2 - 1 >= 0) {
-          this.$emit('canChangePermissions', true)
-        }
-      }
     }
   }
 }

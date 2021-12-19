@@ -1,6 +1,6 @@
 <template>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-    <div v-for="char in $store.state.npcs">
+    <div v-for="char in $store.state.npcs" v-if="canView(char)">
       <div class="w-64 h-48 p-4 border border-gray-200 rounded relative">
         <span class="text-lg font-semibold">{{char.name}}</span>
         <hr class="my-2">
@@ -16,7 +16,7 @@
         </div>
 
         <div class="absolute right-2 bottom-2 flex">
-          <router-link :to="'/e/' + $store.state.campaign.id + '/char/' + char.id" class="button bg-green-400">Edit</router-link> <!-- Hide if this button can not be edited -->
+          <router-link v-if="canEdit(char)" :to="'/e/' + $store.state.campaign.id + '/char/' + char.id" class="button bg-green-400">Edit</router-link> <!-- Hide if this button can not be edited -->
           <router-link :to="'/w/' + $store.state.campaign.id + '/char/' + char.id" class="ml-2 button">View</router-link>
         </div>
 
@@ -31,6 +31,7 @@
 import {db} from "../../plugins/firebase";
 import router from "../../router";
 import PlusBox from "../PlusBox";
+import {hasFilePermission} from "../../plugins/permissions";
 
 export default {
   components: {PlusBox},
@@ -48,6 +49,12 @@ export default {
     getRaces(character) {
       if (!character || !character.quickinfo) return null;
       return character.quickinfo.find((info) => info.title === "Race");
+    },
+    canView(character) {
+      return hasFilePermission(character.permissions).canView
+    },
+    canEdit(character) {
+      return hasFilePermission(character.permissions).canEdit
     }
   }
 }

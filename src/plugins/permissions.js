@@ -35,3 +35,33 @@ export function generatePermissionTree() {
     return tree
 
 }
+
+export function hasFilePermission(filePermission) {
+
+    let permission = {
+        canView: false,
+        canEdit: false,
+        canChangePermissions: false,
+    }
+
+    if (store.state.userPermissionTree.includes("gm")) {
+        permission.canView = true;
+        permission.canEdit = true;
+        permission.canChangePermissions = true;
+        return;
+    }
+
+    for (let perm of store.state.userPermissionTree) {
+        if (filePermission[perm] - 4 >= 0) {
+            permission.canView = true;
+        }
+        if (filePermission[perm] - 4 - 2 >= 0) {
+            permission.canEdit = true;
+        }
+        if (filePermission[perm] - 4 - 2 - 1 >= 0) {
+            permission.canChangePermissions = true;
+        }
+    }
+
+    return permission;
+}

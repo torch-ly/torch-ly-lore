@@ -12,6 +12,7 @@ const store = new Vuex.Store({
         npcs: [],
         user: null,
         users: [],
+        userPermissionTree: [],
         isLoggedIn: false
     },
     mutations: {
@@ -25,6 +26,9 @@ const store = new Vuex.Store({
             state.user = null;
             state.isLoggedIn = false;
             auth.signOut();
+        },
+        userPermissionTree(state, tree) {
+            state.userPermissionTree = tree;
         },
         ...vuexfireMutations
     },
