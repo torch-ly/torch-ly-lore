@@ -1,12 +1,17 @@
 <template>
   <div>
-    <textarea v-if="editMode"
-              class="p-2 mt-1 w-2/3 border"
-              @input="setHeight"
-              ref="textarea"
-              v-model="content"
-              @blur="updateData() & $emit('focusLost')"
-    />
+    <div v-if="editMode" class="mr-20">
+
+      <span>Please not that it is necessary to manually save what you have changed here!</span>
+
+      <!-- At the current time @blur is not working as expected! -->
+      <v-md-editor
+          @blur="updateData() & $emit('focusLost')"
+          @save="updateData() & $emit('focusLost')"
+          v-model="content"
+          height="400px" />
+
+    </div>
 
     <pre v-else class="p-2 mt-1 w-2/3">{{ content }}</pre>
 
@@ -32,25 +37,6 @@ export default {
   methods: {
     updateData() {
       this.$emit('input', this.content);
-    },
-    setHeight() {
-      this.$refs.textarea.style.height = this.$refs.textarea.scrollHeight + 'px';
-    }
-  },
-  mounted() {
-    if (this.editMode) {
-      this.$nextTick(() => {
-        this.setHeight();
-      });
-    }
-  },
-  watch: {
-    editMode() {
-      if (this.editMode) {
-        this.$nextTick(() => {
-          this.setHeight();
-        });
-      }
     }
   }
 }
