@@ -1,5 +1,5 @@
 <template>
-  <PermissionsSufficient v-if="character" :permissions="character.permissions" @canEdit="canEdit = $event">
+  <PermissionsSufficient v-if="item" :permissions="item.permissions" @canEdit="canEdit = $event">
     <div class="m-2 relative p-6">
       <div v-if="canEdit">
         <button v-if="!editMode" class="-mt-10 lg:mt-0 button float-right inline-block" @click="setEditMode(true)">Edit
@@ -9,19 +9,16 @@
         </button>
       </div>
 
-      <SingleLineEdit :editMode="editMode" @focusLost="onNameChange" v-model="character.name" @trash="deleteCharacter"
+      <SingleLineEdit :editMode="editMode" @focusLost="onNameChange" v-model="item.name" @trash="deleteCharacter"
                       class="h1 mb-4"/>
 
       <SideCart class="mt-4">
+
         <div class="mt-2 ml-2">
-          <span>Status : </span>
-          <span
-              :class="character.alive ? 'text-green-500' : 'text-red-500'">{{
-              character.alive ? "Alive" : "Dead"
-            }}</span>
+          <slot :item="item"/>
         </div>
 
-        <div class="mt-2 flex" v-for="(info, index) in character.quickinfo">
+        <div class="mt-2 flex" v-for="(info, index) in item.quickinfo">
 
           <SingleLineEdit noTrash :editMode="editMode" @focusLost="onQuickInfoChange" v-model="info.title"/>
           <span class="py-2">:</span>
@@ -35,7 +32,7 @@
       </SideCart>
 
       <h2 class="mt-8 text-lg p-2">Description</h2>
-      <div v-for="(description, index) in character.description" class="mt-2">
+      <div v-for="(description, index) in item.description" class="mt-2">
 
         <SingleLineEdit class="h3" :editMode="editMode" @focusLost="onDescriptionChange"
                         @trash="removeDescriptionField(index)" v-model="description.title"/>
@@ -50,13 +47,13 @@
   </PermissionsSufficient>
 </template>
 <script>
-import SideCart from "../components/View/SideCard";
-import {db} from "../plugins/firebase";
-import router from "../router";
-import MultilineTextEdit from "../components/MultilineTextEdit";
-import SingleLineEdit from "../components/SingleLineEdit";
-import PlusBox from "../components/PlusBox";
-import PermissionsSufficient from "../components/View/Permission/PermissionsSufficient";
+import SideCart from "./SideCard";
+import {db} from "../../plugins/firebase";
+import router from "../../router";
+import MultilineTextEdit from "../MultilineTextEdit";
+import SingleLineEdit from "../SingleLineEdit";
+import PlusBox from "../PlusBox";
+import PermissionsSufficient from "./Permission/PermissionsSufficient";
 
 export default {
   components: {PermissionsSufficient, PlusBox, SingleLineEdit, MultilineTextEdit, SideCart},
@@ -65,15 +62,22 @@ export default {
       canEdit: false,
     }
   },
-  computed: {
-    character() {
-      return this.$store.state.npcs.find(npc => npc.id === this.$route.params.id);
+  props: {
+    item: {
+      type: Object,
+      required: true,
     },
+    collectionName: {
+      type: String,
+      required: true,
+    },
+  },
+  computed: {
     editMode() {
       return this.canEdit && this.$route.params.mode === "e";
     },
     dbRef() {
-      return db.collection('campaigns').doc(router.currentRoute.params.campaign).collection('npcs').doc(this.character.id);
+      return db.collection('campaigns').doc(router.currentRoute.params.campaign).collection(this.collectionName).doc(this.item.id);
     }
   },
   methods: {
@@ -83,23 +87,23 @@ export default {
       });
     },
     onNameChange() {
-      this.dbRef.update({name: this.character.name});
+      this.dbRef.update({name: this.item.name});
     },
     deleteCharacter() {
       this.dbRef.delete();
       router.push({name: "Character Overview"});
     },
     onDescriptionChange() {
-      this.dbRef.update({description: this.character.description});
+      this.dbRef.update({description: this.item.description});
     },
     addDescriptionField() {
-      if (!this.character.description) {
-        this.character.description = [];
+      if (!this.item.description) {
+        this.item.description = [];
       }
 
       this.dbRef.update({
         description: [
-          ...this.character.description,
+          ...this.item.description,
           {
             title: "New Description",
             content: "Write your text here!"
@@ -108,17 +112,17 @@ export default {
       });
     },
     removeDescriptionField(index) {
-      this.character.description.splice(index, 1);
-      this.dbRef.update({description: this.character.description});
+      this.item.description.splice(index, 1);
+      this.dbRef.update({description: this.item.description});
     },
     addQuickInfo() {
-      if (!this.character.quickinfo) {
-        this.character.quickinfo = [];
+      if (!this.item.quickinfo) {
+        this.item.quickinfo = [];
       }
 
       this.dbRef.update({
         quickinfo: [
-          ...this.character.quickinfo,
+          ...this.item.quickinfo,
           {
             title: "Info",
             content: "Content"
@@ -127,11 +131,11 @@ export default {
       });
     },
     onQuickInfoChange() {
-      this.dbRef.update({quickinfo: this.character.quickinfo});
+      this.dbRef.update({quickinfo: this.item.quickinfo});
     },
     removeQuickInfo(index) {
       this.character.quickinfo.splice(index, 1);
-      this.dbRef.update({quickinfo: this.character.quickinfo});
+      this.dbRef.update({quickinfo: this.item.quickinfo});
     }
   },
 }

@@ -4,7 +4,7 @@ import Home from '../views/Home.vue'
 import CampaignHome from '../views/CampaignHome.vue'
 import Login from "../views/Login";
 import Character from "../views/Characters";
-import SingleCharacter from "../views/SingleCharacter";
+import SingleCharacter from "../views/SingleView/SingleCharacter";
 import Permissions from "../views/Permissions";
 
 Vue.use(VueRouter)
