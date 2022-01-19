@@ -28,7 +28,7 @@
             </div>
             <div class="mt-5 flex-1 h-0 overflow-y-auto">
               <nav class="px-2 space-y-1">
-                <a v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'group flex items-center px-2 py-2 text-base font-medium rounded-md']">
+                <a v-for="item in navigation" :key="item.name" @click="$router.push(item.route); sidebarOpen = false"  :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'group flex items-center px-2 py-2 text-base font-medium rounded-md']">
                   <component :is="item.icon" :class="[item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300', 'mr-4 flex-shrink-0 h-6 w-6']" aria-hidden="true" />
                   {{ item.name }}
                 </a>
@@ -51,7 +51,7 @@
         </div>
         <div class="flex-1 flex flex-col overflow-y-auto">
           <nav class="flex-1 px-2 py-4 space-y-1">
-            <a v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']">
+            <a v-for="item in navigation" :key="item.name" @click="$router.push(item.route)" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']">
               <component :is="item.icon" :class="[item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300', 'mr-3 flex-shrink-0 h-6 w-6']" aria-hidden="true" />
               {{ item.name }}
             </a>
@@ -145,15 +145,13 @@ import {
   XIcon,
 } from '@heroicons/vue/outline'
 import { SearchIcon } from '@heroicons/vue/solid'
+import router from '@/router'
 
-const navigation = [
-  { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-  { name: 'Team', href: '#', icon: UsersIcon, current: false },
-  { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-  { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-  { name: 'Documents', href: '#', icon: InboxIcon, current: false },
-  { name: 'Reports', href: '#', icon: ChartBarIcon, current: false },
+let navigation = [
+  { name: 'Dashboard', route: {name: 'Campaign Home'}, icon: HomeIcon, current: true },
+  { name: 'NPCs', route: {name: 'Npcs'}, icon: UsersIcon, current: false },
 ]
+
 const userNavigation = [
   { name: 'Your Profile', href: '#' },
   { name: 'Settings', href: '#' },
@@ -179,10 +177,23 @@ export default {
     const sidebarOpen = ref(false)
 
     return {
-      navigation,
       userNavigation,
       sidebarOpen,
     }
   },
+  data() {
+    return {
+      navigation,
+    }
+  },
+  mounted() {
+    let self = this;
+    router.afterEach(() => {
+      self.navigation = navigation.map(item => {
+        item.current = item.route.name === self.$route.name
+        return item
+      })
+    })
+  }
 }
 </script>
