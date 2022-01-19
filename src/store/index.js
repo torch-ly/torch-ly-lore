@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import {collection, onSnapshot, query} from "firebase/firestore";
+import { signOut } from "firebase/auth";
 import {auth, db} from "@/plugins/firebase";
 
 export default createStore({
@@ -15,6 +16,14 @@ export default createStore({
     },
     setUser (state, user) {
       state.user = user;
+    },
+    logout(state) {
+      state.user = null;
+      state.isLoggedIn = false;
+      signOut(auth).then(() => {
+      }).catch((error) => {
+        console.log(error)
+      });
     }
   },
   actions: {
@@ -30,7 +39,7 @@ export default createStore({
         if (user) {
           await context.commit('setUser', user);
         } else {
-          await context.commit('setUser', {});
+          await context.commit('setUser', null);
         }
       })
     }
