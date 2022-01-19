@@ -12,9 +12,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 createApp(App)
     .component('font-awesome-icon', FontAwesomeIcon)
-    .use(store)
     .use(router)
+    .use(store)
     .mount('#app')
-
-// bind firebase database to store
-store.dispatch('bindNpcs');

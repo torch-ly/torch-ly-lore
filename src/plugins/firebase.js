@@ -1,9 +1,8 @@
 import 'firebase/firestore'
 import 'firebase/auth'
-//import { getAuth } from "firebase/auth"
-
 import { initializeApp } from "firebase/app"
-import { getFirestore } from "firebase/firestore"
+import { getAuth } from "firebase/auth"
+import {collection, getFirestore} from "firebase/firestore"
 
 const firebaseApp = initializeApp({
     apiKey: process.env.VUE_APP_API_KEY,
@@ -13,6 +12,5 @@ const firebaseApp = initializeApp({
     messagingSenderId: process.env.VUE_APP_MESSAGING_SENDER_ID,
     appId: process.env.VUE_APP_APP_ID,
 });
-
 export const db = getFirestore();
-//export const auth = getAuth();
+export const auth = getAuth();
