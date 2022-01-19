@@ -13,6 +13,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.0-5",
     "@headlessui/vue": "^1.4.3",
     "@heroicons/vue": "^1.0.5",
+    "@tailwindcss/forms": "^0.4.0",
     "autoprefixer": "^10",
     "firebase": "9.4.1",
     "heroicons": "^1.0.5",

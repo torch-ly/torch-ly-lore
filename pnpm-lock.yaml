@@ -7,6 +7,7 @@ specifiers:
   '@fortawesome/vue-fontawesome': ^3.0.0-5
   '@headlessui/vue': ^1.4.3
   '@heroicons/vue': ^1.0.5
+  '@tailwindcss/forms': ^0.4.0
   '@vue/cli-plugin-pwa': ~5.0.0-rc.2
   '@vue/cli-plugin-router': ~5.0.0-rc.2
   '@vue/cli-plugin-vuex': ~5.0.0-rc.2
@@ -29,6 +30,7 @@ dependencies:
   '@fortawesome/vue-fontawesome': 3.0.0-5_80326c60c9ddfbc0f223b72efedee201
   '@headlessui/vue': 1.4.3_vue@3.2.27
   '@heroicons/vue': 1.0.5_vue@3.2.27
+  '@tailwindcss/forms': 0.4.0_tailwindcss@3.0.15
   autoprefixer: 10.4.2_postcss@8.4.5
   firebase: 9.4.1
   heroicons: 1.0.5
@@ -1845,6 +1847,15 @@ packages:
       magic-string: 0.25.7
       string.prototype.matchall: 4.0.6
     dev: true
+
+  /@tailwindcss/forms/0.4.0_tailwindcss@3.0.15:
+    resolution: {integrity: sha512-DeaQBx6EgEeuZPQACvC+mKneJsD8am1uiJugjgQK1+/Vt+Ai0GpFBC2T2fqnUad71WgOxyrZPE6BG1VaI6YqfQ==}
+    peerDependencies:
+      tailwindcss: '>=3.0.0 || >= 3.0.0-alpha.1'
+    dependencies:
+      mini-svg-data-uri: 1.4.3
+      tailwindcss: 3.0.15_ef48b3b8837f8a23677bffe8f9cd866d
+    dev: false
 
   /@trysound/sax/0.2.0:
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
@@ -4797,6 +4808,11 @@ packages:
       schema-utils: 4.0.0
       webpack: 5.66.0
     dev: true
+
+  /mini-svg-data-uri/1.4.3:
+    resolution: {integrity: sha512-gSfqpMRC8IxghvMcxzzmMnWpXAChSA+vy4cia33RgerMS8Fex95akUyQZPbxJJmeBGiGmK7n/1OpUX8ksRjIdA==}
+    hasBin: true
+    dev: false
 
   /minimalistic-assert/1.0.1:
     resolution: {integrity: sha512-UtJcAD4yEaGtjPezWuO9wC4nwUnVH/8/Im3yEHQP4b67cXlD/Qr9hdITCU1xDbSEXg2XKNaP8jsReV7vQd00/A==}
