@@ -1,21 +1,19 @@
 <template>
   <div class="about">
+    {{npcs}}
     <h1>This is an about page</h1>
+    <div></div>
   </div>
 </template>
 <script>
-import { doc, onSnapshot } from "firebase/firestore";
 import {db} from "@/plugins/firebase";
+import { collection, query, where, onSnapshot, doc, getDoc, getDocs } from "firebase/firestore";
 
 export default {
-  mounted() {
-
-    db.collection("campaigns").doc("Iqor").collection("npcs")
-        .onSnapshot((snap) => {
-          snap.docChanges().forEach((change) => {
-            console.log(change)
-          });
-        });
-  }
+  computed: {
+    npcs() {
+      return this.$store.state.npcs;
+    }
+  },
 }
 </script>

@@ -15,3 +15,6 @@ createApp(App)
     .use(store)
     .use(router)
     .mount('#app')
+
+// bind firebase database to store
+store.dispatch('bindNpcs');
