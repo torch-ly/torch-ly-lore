@@ -1,17 +1,20 @@
 import { createStore } from 'vuex'
 import {collection, onSnapshot, query} from "firebase/firestore";
-import {db} from "@/plugins/firebase";
+import {auth, db} from "@/plugins/firebase";
 
 export default createStore({
   state: {
     npcs: [],
-    campaign: "Iqor"
+    user: null
   },
   getters: {
   },
   mutations: {
     setNpcs (state, npcs) {
       state.npcs = npcs;
+    },
+    setUser (state, user) {
+      state.user = user;
     }
   },
   actions: {
@@ -21,6 +24,15 @@ export default createStore({
       onSnapshot(query(NPC_COLLECTION), (snapshot) => {
         commit('setNpcs', snapshot.docs.map(doc => {return {...doc.data(), _id: doc.id}}));
       });
+    },
+    handleLogin(context) {
+      auth.onAuthStateChanged(async user => {
+        if (user) {
+          await context.commit('setUser', user);
+        } else {
+          await context.commit('setUser', {});
+        }
+      })
     }
   }
 })

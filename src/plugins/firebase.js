@@ -2,7 +2,8 @@ import 'firebase/firestore'
 import 'firebase/auth'
 import { initializeApp } from "firebase/app"
 import { getAuth } from "firebase/auth"
-import {collection, getFirestore} from "firebase/firestore"
+import {getFirestore} from "firebase/firestore"
+import { GoogleAuthProvider } from "firebase/auth"
 
 const firebaseApp = initializeApp({
     apiKey: process.env.VUE_APP_API_KEY,
@@ -14,3 +15,6 @@ const firebaseApp = initializeApp({
 });
 export const db = getFirestore();
 export const auth = getAuth();
+auth.useDeviceLanguage();
+
+export const googleProvider = new GoogleAuthProvider();

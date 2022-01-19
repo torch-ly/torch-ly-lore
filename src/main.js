@@ -15,3 +15,5 @@ createApp(App)
     .use(router)
     .use(store)
     .mount('#app')
+
+store.dispatch("handleLogin");
