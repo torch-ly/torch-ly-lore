@@ -14,6 +14,9 @@ export class Npc {
     ref() {
         return doc('campaigns', store.state.campaign, this._id).withConverter(npcConverter);
     }
+    getRoute() {
+        return "/w/" + store.state.campaign + "/npc/" + this._id;
+    }
     async push() {
         await updateDoc(this.ref(), this);
     }

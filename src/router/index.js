@@ -1,8 +1,8 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import HomeView from '../views/Home.vue'
 import Campaign from '../views/Campaign.vue'
-import Npcs from '../views/Npcs.vue'
-import {updateNavigation} from "@/components/NavBar";
+import Npcs from '../views/NPC/Npcs.vue'
+import Npc from '../views/NPC/Npc.vue'
 import store from "@/store";
 
 const routes = [
@@ -25,8 +25,12 @@ const routes = [
         path: '/w/:campaign/npcs',
         name: 'Npcs',
         component: Npcs
+    },
+    {
+        path: '/w/:campaign/npc/:id',
+        name: 'Npc details',
+        component: Npc
     }
-
 ]
 
 const router = createRouter({
