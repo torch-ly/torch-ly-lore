@@ -2,7 +2,7 @@
   <NavBar>
     <template v-slot:header>Campaign Dashboard</template>
     <template v-slot:body>
-      {{$store.state.npcs}}
+      {{$store.state.campaignData}}
     </template>
   </NavBar>
 </template>

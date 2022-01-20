@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import {collection, doc, onSnapshot, query} from "firebase/firestore";
+import {collection, doc, onSnapshot, query, getDoc} from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import {auth, db} from "@/plugins/firebase";
 import router from "@/router";
@@ -79,8 +79,22 @@ export default createStore({
 
         const DOC = doc(db, "campaigns", campaign);
 
-        let listener = onSnapshot(DOC, (doc) => {
-          commit('setCampaignData', doc.data());
+        let listener = onSnapshot(DOC, async (doc) => {
+          let data = doc.data();
+
+          // query the users
+          let userData = [];
+
+          for (let user of data.users) {
+            userData.push({
+              permission: user.permission,
+              object: (await getDoc(user.object)).data()
+            });
+          }
+
+          data.users = userData;
+
+          commit('setCampaignData', data);
         });
 
         commit('setCampaignDataListener', listener);
