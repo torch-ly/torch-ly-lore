@@ -19,14 +19,12 @@ const routes = [
     {
         path: '/w/:campaign',
         name: 'Campaign Home',
-        component: Campaign,
-        props: true
+        component: Campaign
     },
     {
         path: '/w/:campaign/npcs',
         name: 'Npcs',
-        component: Npcs,
-        props: true
+        component: Npcs
     }
 
 ]
