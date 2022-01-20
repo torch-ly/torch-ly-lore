@@ -39,6 +39,7 @@ const router = createRouter({
 })
 
 router.afterEach(() => {
+    store.dispatch('bindCampaignData')
     store.dispatch('bindNpcs')
 })
 

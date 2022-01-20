@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import {collection, onSnapshot, query} from "firebase/firestore";
+import {collection, doc, onSnapshot, query} from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import {auth, db} from "@/plugins/firebase";
 import router from "@/router";
@@ -9,6 +9,8 @@ export default createStore({
   state: {
     npcs: [],
     _npcListener: null,
+    campaignData: [],
+    _campaignDataListener: null,
     campaign: null,
     user: null
   },
@@ -26,6 +28,12 @@ export default createStore({
     },
     setNpcListener (state, listener) {
       state._npcListener = listener;
+    },
+    setCampaignData (state, data) {
+      state.campaignData = data;
+    },
+    setCampaignDataListener (state, listener) {
+      state._campaignDataListener = listener;
     },
     logout(state) {
       state.user = null;
@@ -58,9 +66,34 @@ export default createStore({
       }
 
     },
+    async bindCampaignData ({commit, state, dispatch}) {
+
+      if (router.currentRoute.value.params.campaign !== state.campaign) {
+        await dispatch('unbind');
+      }
+
+      if (state._npcListener === null) {
+        let campaign = router.currentRoute.value.params.campaign + "";
+
+        commit('setCampaign', campaign);
+
+        const DOC = doc(db, "campaigns", campaign);
+
+        let listener = onSnapshot(DOC, (doc) => {
+          commit('setCampaignData', doc.data());
+        });
+
+        commit('setCampaignDataListener', listener);
+
+      }
+
+    },
     async unbind({commit, state}) {
       if (state._npcListener != null) await state._npcListener();
       commit('setNpcListener', null);
+
+      if (state._campaignDataListener != null) await state._campaignDataListener();
+      commit('setCampaignDataListener', null);
     },
     handleLogin(context) {
       auth.onAuthStateChanged(async user => {
