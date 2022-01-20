@@ -8,6 +8,7 @@ specifiers:
   '@headlessui/vue': ^1.4.3
   '@heroicons/vue': ^1.0.5
   '@tailwindcss/forms': ^0.4.0
+  '@tailwindcss/typography': ^0.5.0
   '@vue/cli-plugin-pwa': ~5.0.0-rc.2
   '@vue/cli-plugin-router': ~5.0.0-rc.2
   '@vue/cli-plugin-vuex': ~5.0.0-rc.2
@@ -15,6 +16,8 @@ specifiers:
   autoprefixer: ^10
   firebase: 9.4.1
   heroicons: ^1.0.5
+  lodash: ^4.17.21
+  marked: ^4.0.10
   postcss: ^8
   register-service-worker: ^1.7.2
   tailwindcss: ^3
@@ -34,6 +37,8 @@ dependencies:
   autoprefixer: 10.4.2_postcss@8.4.5
   firebase: 9.4.1
   heroicons: 1.0.5
+  lodash: 4.17.21
+  marked: 4.0.10
   postcss: 8.4.5
   register-service-worker: 1.7.2
   tailwindcss: 3.0.15_ef48b3b8837f8a23677bffe8f9cd866d
@@ -42,6 +47,7 @@ dependencies:
   vuex: 4.0.2_vue@3.2.27
 
 devDependencies:
+  '@tailwindcss/typography': 0.5.0_tailwindcss@3.0.15
   '@vue/cli-plugin-pwa': 5.0.0-rc.2_@vue+cli-service@5.0.0-rc.2
   '@vue/cli-plugin-router': 5.0.0-rc.2_@vue+cli-service@5.0.0-rc.2
   '@vue/cli-plugin-vuex': 5.0.0-rc.2_@vue+cli-service@5.0.0-rc.2
@@ -1856,6 +1862,18 @@ packages:
       mini-svg-data-uri: 1.4.3
       tailwindcss: 3.0.15_ef48b3b8837f8a23677bffe8f9cd866d
     dev: false
+
+  /@tailwindcss/typography/0.5.0_tailwindcss@3.0.15:
+    resolution: {integrity: sha512-1p/3C6C+JJziS/ghtG8ACYalbA2SyLJY27Pm33cVTlAoY6VQ7zfm2H64cPxUMBkVIlWXTtWHhZcZJPobMRmQAA==}
+    peerDependencies:
+      tailwindcss: '>=3.0.0 || >= 3.0.0-alpha.1 || insiders'
+    dependencies:
+      lodash.castarray: 4.4.0
+      lodash.isplainobject: 4.0.6
+      lodash.merge: 4.6.2
+      lodash.uniq: 4.5.0
+      tailwindcss: 3.0.15_ef48b3b8837f8a23677bffe8f9cd866d
+    dev: true
 
   /@trysound/sax/0.2.0:
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
@@ -4644,6 +4662,10 @@ packages:
     resolution: {integrity: sha1-soqmKIorn8ZRA1x3EfZathkDMaY=}
     dev: false
 
+  /lodash.castarray/4.4.0:
+    resolution: {integrity: sha1-wCUTUV4wna3dTCTGDP3c9ZdtkRU=}
+    dev: true
+
   /lodash.debounce/4.0.8:
     resolution: {integrity: sha1-gteb/zCmfEAF/9XiUVMArZyk168=}
     dev: true
@@ -4652,12 +4674,20 @@ packages:
     resolution: {integrity: sha512-3j8wdDzYuWO3lM3Reg03MuQR957t287Rpcxp1njpEa8oDrikb+FwGdW3n+FELh/A6qib6yPit0j/pv9G/yeAqA==}
     dev: true
 
+  /lodash.isplainobject/4.0.6:
+    resolution: {integrity: sha1-fFJqUtibRcRcxpC4gWO+BJf1UMs=}
+    dev: true
+
   /lodash.mapvalues/4.6.0:
     resolution: {integrity: sha1-G6+lAF3p3W9PJmaMMMo3IwzJaJw=}
     dev: true
 
   /lodash.memoize/4.1.2:
     resolution: {integrity: sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=}
+    dev: true
+
+  /lodash.merge/4.6.2:
+    resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
     dev: true
 
   /lodash.sortby/4.7.0:
@@ -4670,7 +4700,6 @@ packages:
 
   /lodash/4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
-    dev: true
 
   /log-symbols/4.1.0:
     resolution: {integrity: sha512-8XPvpAA8uyhfteu8pIvQxpJZ7SYYdpUivZpGy6sFsBuKRY/7rQGavedeB8aK+Zkyq6upMFVL/9AW6vOYzfRyLg==}
@@ -4724,6 +4753,12 @@ packages:
     dependencies:
       semver: 6.3.0
     dev: true
+
+  /marked/4.0.10:
+    resolution: {integrity: sha512-+QvuFj0nGgO970fySghXGmuw+Fd0gD2x3+MqCWLIPf5oxdv1Ka6b2q+z9RP01P/IaKPMEramy+7cNy/Lw8c3hw==}
+    engines: {node: '>= 12'}
+    hasBin: true
+    dev: false
 
   /mdn-data/2.0.14:
     resolution: {integrity: sha512-dn6wd0uw5GsdswPFfsgMp5NSB0/aDe6fK94YJV/AJDYXL6HVLWBsxeq7js7Ad+mU2K9LAlwpk6kN2D5mwCPVow==}

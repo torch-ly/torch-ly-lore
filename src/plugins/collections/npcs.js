@@ -12,7 +12,7 @@ export class Npc {
         this._id = id;
     }
     ref() {
-        return doc('campaigns', store.state.campaign, this._id).withConverter(npcConverter);
+        return doc(db, 'campaigns', store.state.campaign, 'npcs', this._id).withConverter(npcConverter);
     }
     getRoute() {
         return "/w/" + store.state.campaign + "/npc/" + this._id;
