@@ -32,6 +32,6 @@ export const npcConverter = {
     },
     fromFirestore: (snapshot, options) => {
         const data = snapshot.data(options);
-        return new Npc(data.name, data.alive, data.permissions, snapshot.id);
+        return new Npc(data.name, data.alive, data.permissions, data.description, data.quickinfo, snapshot.id);
     }
 };

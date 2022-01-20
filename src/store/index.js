@@ -51,7 +51,7 @@ export default createStore({
         const NPC_COLLECTION = collection(db, "campaigns", campaign, "npcs").withConverter(npcConverter);
 
         let listener = onSnapshot(query(NPC_COLLECTION), (snapshot) => {
-          commit('setNpcs', snapshot.docs.map(doc => {return {...doc.data(), _id: doc.id}}));
+          commit('setNpcs', snapshot.docs.map(doc => {return doc.data()}));
         });
         commit('setNpcListener', listener);
 
