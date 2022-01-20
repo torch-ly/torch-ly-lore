@@ -2,7 +2,7 @@
   <NavBar>
     <template v-slot:header>{{ npc?.name }}</template>
     <template v-slot:body>
-      <TextEdit v-if="npc" v-for="desc in npc.description" :editable="true" class="my-5" v-model:value="desc.content" @blur="updateDescription"/>
+      <TextEdit v-if="npc" v-for="desc in npc.description" :editable="canEdit()" class="my-5" v-model:value="desc.content" @blur="updateDescription"/>
     </template>
 
   </NavBar>
@@ -29,6 +29,9 @@ export default {
       }).catch((err) => {
         console.log(err)
       })
+    },
+    canEdit() {
+      return false;
     }
   }
 }

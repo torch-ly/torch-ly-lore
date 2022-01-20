@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-2 bg-white border shadow">
+  <div :class="editable & 'grid-cols-2'" class="grid bg-white border shadow">
     <textarea v-if="editable" class="border-none border-0 resize-none p-3 h-full focus:outline-none" ref="textarea" :value="content" @input="update($event) & setHeight()" @blur="$emit('update:value', $event.target.value) & $emit('blur')" />
     <div class="border-l p-3 prose" v-html="compiledMarkdown" />
   </div>
