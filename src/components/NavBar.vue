@@ -187,6 +187,12 @@ export default {
     }
   },
   mounted() {
+
+    this.navigation = navigation.map(item => {
+      item.current = item.route.name === this.$route.name
+      return item
+    })
+
     let self = this;
     router.afterEach(() => {
       self.navigation = navigation.map(item => {
