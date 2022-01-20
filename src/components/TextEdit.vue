@@ -7,6 +7,7 @@
 <script>
 import {marked} from "marked";
 import {debounce} from "lodash";
+import DOMPurify from 'dompurify';
 
 export default {
   props: {
@@ -27,7 +28,7 @@ export default {
   },
   computed: {
     compiledMarkdown: function () {
-      return marked(this.content);
+      return DOMPurify.sanitize(marked(this.content));
     }
   },
   mounted() {

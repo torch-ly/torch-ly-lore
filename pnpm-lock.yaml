@@ -14,6 +14,7 @@ specifiers:
   '@vue/cli-plugin-vuex': ~5.0.0-rc.2
   '@vue/cli-service': ~5.0.0-rc.2
   autoprefixer: ^10
+  dompurify: ^2.3.4
   firebase: 9.4.1
   heroicons: ^1.0.5
   lodash: ^4.17.21
@@ -35,6 +36,7 @@ dependencies:
   '@heroicons/vue': 1.0.5_vue@3.2.27
   '@tailwindcss/forms': 0.4.0_tailwindcss@3.0.15
   autoprefixer: 10.4.2_postcss@8.4.5
+  dompurify: 2.3.4
   firebase: 9.4.1
   heroicons: 1.0.5
   lodash: 4.17.21
@@ -3456,6 +3458,10 @@ packages:
     dependencies:
       domelementtype: 2.2.0
     dev: true
+
+  /dompurify/2.3.4:
+    resolution: {integrity: sha512-6BVcgOAVFXjI0JTjEvZy901Rghm+7fDQOrNIcxB4+gdhj6Kwp6T9VBhBY/AbagKHJocRkDYGd6wvI+p4/10xtQ==}
+    dev: false
 
   /domutils/2.8.0:
     resolution: {integrity: sha512-w96Cjofp72M5IIhpjgobBimYEfoPjx1Vx0BSX9P30WBdZW2WIKU0T1Bd0kz2eNZ9ikjKgHbEyKx8BB6H1L3h3A==}
