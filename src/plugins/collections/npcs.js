@@ -2,10 +2,10 @@ import {doc, updateDoc} from "firebase/firestore";
 import {db} from "@/plugins/firebase";
 import store from "@/store";
 
-class Npc {
-    constructor (name, alive, permissions, description, quickinfo,id ) {
-        this.alive = name;
-        this.name = state;
+export class Npc {
+    constructor (name, alive, permissions, description, quickinfo, id) {
+        this.name = name;
+        this.alive = alive;
         this.permissions = permissions;
         this.description = description;
         this.quickinfo = quickinfo;
@@ -20,7 +20,7 @@ class Npc {
 }
 
 // Firestore data converter
-const npcConverter = {
+export const npcConverter = {
     toFirestore: (npc) => {
         return {
             alive: this.alive,
@@ -35,7 +35,3 @@ const npcConverter = {
         return new Npc(data.name, data.alive, data.permissions, snapshot.id);
     }
 };
-
-export function npcDocument(id) {
-    return doc(db, 'campaigns', store.state.campaign, id);
-}

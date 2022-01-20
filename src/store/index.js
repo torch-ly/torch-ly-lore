@@ -3,6 +3,7 @@ import {collection, onSnapshot, query} from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import {auth, db} from "@/plugins/firebase";
 import router from "@/router";
+import {npcConverter} from "@/plugins/collections/npcs";
 
 export default createStore({
   state: {
@@ -47,7 +48,7 @@ export default createStore({
 
         commit('setCampaign', campaign);
 
-        const NPC_COLLECTION = collection(db, "campaigns", campaign, "npcs");
+        const NPC_COLLECTION = collection(db, "campaigns", campaign, "npcs").withConverter(npcConverter);
 
         let listener = onSnapshot(query(NPC_COLLECTION), (snapshot) => {
           commit('setNpcs', snapshot.docs.map(doc => {return {...doc.data(), _id: doc.id}}));
