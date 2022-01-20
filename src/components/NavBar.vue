@@ -148,8 +148,8 @@ import { SearchIcon } from '@heroicons/vue/solid'
 import router from '@/router'
 
 let navigation = [
-  { name: 'Dashboard', route: {name: 'Campaign Home'}, icon: HomeIcon, current: true },
-  { name: 'NPCs', route: {name: 'Npcs'}, icon: UsersIcon, current: false },
+  { name: 'Dashboard', route: {name: 'Campaign Home'}, activeRoutes: ['Campaign Home'], icon: HomeIcon, current: true },
+  { name: 'NPCs', route: {name: 'Npcs'}, activeRoutes: ['Npcs', 'Npc details'], icon: UsersIcon, current: false },
 ]
 
 const userNavigation = [
@@ -189,14 +189,14 @@ export default {
   mounted() {
 
     this.navigation = navigation.map(item => {
-      item.current = item.route.name === this.$route.name
+      item.current = item.activeRoutes.includes(this.$route.name);
       return item
     })
 
     let self = this;
     router.afterEach(() => {
       self.navigation = navigation.map(item => {
-        item.current = item.route.name === self.$route.name
+        item.current = item.activeRoutes.includes(self.$route.name);
         return item
       })
     })
