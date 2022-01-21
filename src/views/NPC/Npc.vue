@@ -25,8 +25,6 @@ export default {
       console.log(this.npc.ref(), this.npc.description)
       updateDoc(this.npc.ref(), {
         description: this.npc.description
-      }).then(() => {
-        console.log("updated")
       }).catch((err) => {
         console.log(err)
       })
