@@ -31,7 +31,7 @@ export default {
       })
     },
     canEdit() {
-      return false;
+      return true;
     }
   }
 }

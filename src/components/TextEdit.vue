@@ -1,5 +1,5 @@
 <template>
-  <div :class="editable & 'grid-cols-2'" class="grid bg-white border shadow">
+  <div :class="editable && 'grid-cols-2'" class="h-full grid bg-white border shadow">
     <textarea v-if="editable" class="border-none border-0 resize-none p-3 h-full focus:outline-none" ref="textarea" :value="content" @input="update($event) & setHeight()" @blur="$emit('update:value', $event.target.value) & $emit('blur')" />
     <div class="border-l p-3 prose" v-html="compiledMarkdown" />
   </div>
@@ -43,7 +43,7 @@ export default {
       this.content = e.target.value;
     }, 300),
     setHeight() {
-      this.$refs.textarea.style.height = "0px";
+      this.$refs.textarea.style.height = "100%";
       this.$refs.textarea.style.height = this.$refs.textarea.scrollHeight + 'px';
     },
   },
@@ -58,3 +58,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+.border-none {
+  @apply ring-0
+}
+</style>
