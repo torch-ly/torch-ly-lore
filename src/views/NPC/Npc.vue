@@ -2,7 +2,8 @@
   <NavBar>
     <template v-slot:header>{{ npc?.name }}</template>
     <template v-slot:body>
-      <TextEdit v-if="npc" v-for="desc in npc.description" :editable="$route.query.edit !== undefined && canWrite(npc.permissions)" class="my-5" v-model:value="desc.content" @blur="updateDescription"/>
+      {{npc}}
+      <TextEdit v-if="npc" v-for="desc in npc.description" :editable="$route.query.edit !== undefined && canWrite(npc.permissionWrite)" class="my-5" v-model:value="desc.content" @blur="updateDescription"/>
     </template>
 
   </NavBar>
