@@ -24,6 +24,7 @@
             <LineEdit :editable="$route.query.edit !== undefined && canWrite(npc.permissionWrite)" class="my-5" v-model:value="desc.title" @blur="updateDescription"/>
             <TextEdit :editable="$route.query.edit !== undefined && canWrite(npc.permissionWrite)" class="my-2" v-model:value="desc.content" @blur="updateDescription"/>
           </div>
+          <div v-if="$route.query.edit !== undefined && canWrite(npc.permissionWrite)" @click="npc.description.push({title: 'New Section', content: ''})" class="w-full text-center bg-gray-50 text-gray-900 border shadow py-2 mt-5"><font-awesome-icon size="2x" icon="plus" /></div>
         </div>
       </div>
     </template>
@@ -46,9 +47,8 @@ export default {
   },
   methods: {
     updateDescription() {
-      console.log(this.npc.ref(), this.npc.description)
       updateDoc(this.npc.ref(), {
-        description: this.npc.description
+        description: this.npc.description.filter((desc) => desc.title !== '' || desc.content !== ''),
       }).catch((err) => {
         console.log(err)
       })
