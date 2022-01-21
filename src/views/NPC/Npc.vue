@@ -20,7 +20,10 @@
           </button>
         </div>
         <div v-else>
-          <TextEdit v-if="npc" v-for="desc in npc.description" :editable="$route.query.edit !== undefined && canWrite(npc.permissionWrite)" class="my-5" v-model:value="desc.content" @blur="updateDescription"/>
+          <div v-if="npc" v-for="desc in npc.description">
+            <LineEdit :editable="$route.query.edit !== undefined && canWrite(npc.permissionWrite)" class="my-5" v-model:value="desc.title" @blur="updateDescription"/>
+            <TextEdit :editable="$route.query.edit !== undefined && canWrite(npc.permissionWrite)" class="my-2" v-model:value="desc.content" @blur="updateDescription"/>
+          </div>
         </div>
       </div>
     </template>
@@ -32,9 +35,10 @@ import NavBar from "@/components/NavBar";
 import TextEdit from "@/components/TextEdit";
 import {updateDoc} from "firebase/firestore";
 import {canWrite} from "@/plugins/permissions";
+import LineEdit from "@/components/LineEdit";
 
 export default {
-  components: {NavBar, TextEdit},
+  components: {LineEdit, NavBar, TextEdit},
   computed: {
     npc() {
       return this.$store.state.npcs.find((npc) => npc._id === this.$route.params.id);
