@@ -2,7 +2,7 @@
   <NavBar>
     <template v-slot:header>{{ npc?.name }}</template>
     <template v-slot:body>
-      <TextEdit v-if="npc" v-for="desc in npc.description" :editable="canEdit()" class="my-5" v-model:value="desc.content" @blur="updateDescription"/>
+      <TextEdit v-if="npc" v-for="desc in npc.description" :editable="canWrite(npc.permissions)" class="my-5" v-model:value="desc.content" @blur="updateDescription"/>
     </template>
 
   </NavBar>
@@ -11,6 +11,7 @@
 import NavBar from "@/components/NavBar";
 import TextEdit from "@/components/TextEdit";
 import {updateDoc} from "firebase/firestore";
+import {canWrite} from "@/plugins/permissions";
 
 export default {
   components: {NavBar, TextEdit},
@@ -30,9 +31,7 @@ export default {
         console.log(err)
       })
     },
-    canEdit() {
-      return true;
-    }
+    canWrite,
   }
 }
 </script>

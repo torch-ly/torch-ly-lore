@@ -80,21 +80,7 @@ export default createStore({
         const DOC = doc(db, "campaigns", campaign);
 
         let listener = onSnapshot(DOC, async (doc) => {
-          let data = doc.data();
-
-          // query the users
-          let userData = [];
-
-          for (let user of data.users) {
-            userData.push({
-              permission: user.permission,
-              object: (await getDoc(user.object)).data()
-            });
-          }
-
-          data.users = userData;
-
-          commit('setCampaignData', data);
+          commit('setCampaignData', doc.data());
         });
 
         commit('setCampaignDataListener', listener);
