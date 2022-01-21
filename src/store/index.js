@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import {collection, doc, onSnapshot, query, getDoc} from "firebase/firestore";
+import {collection, doc, onSnapshot, query, where} from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import {auth, db} from "@/plugins/firebase";
 import router from "@/router";
@@ -58,7 +58,13 @@ export default createStore({
 
         const NPC_COLLECTION = collection(db, "campaigns", campaign, "npcs").withConverter(npcConverter);
 
-        let listener = onSnapshot(query(NPC_COLLECTION), (snapshot) => {
+        let validArray = ['true'];
+        if (state.user) {
+          console.log(state.user.uid);
+          validArray.push(state.user.uid);
+        }
+
+        let listener = onSnapshot(query(NPC_COLLECTION, where('permissionRead', 'array-contains-any', validArray)), (snapshot) => {
           commit('setNpcs', snapshot.docs.map(doc => {return doc.data()}));
         });
         commit('setNpcListener', listener);
@@ -99,6 +105,13 @@ export default createStore({
       auth.onAuthStateChanged(async user => {
         if (user) {
           await context.commit('setUser', user);
+
+          // TODO change this! This consumes a lot of resources
+          await context.state._npcListener();
+          context.commit('setNpcListener', null);
+
+          context.dispatch('bindNpcs');
+
         } else {
           await context.commit('setUser', null);
         }
