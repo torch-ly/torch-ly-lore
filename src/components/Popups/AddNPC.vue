@@ -75,8 +75,8 @@ export async function newNPC() {
       alive: true,
       description: [],
       quickinfo: [],
-      permissionRead: ["false", "false", component.$store.state.user?.uid],
-      permissionWrite: ["false", "false", component.$store.state.user?.uid]
+      permissionRead: ["false", component.$store.state.user?.uid],
+      permissionWrite: ["false", component.$store.state.user?.uid]
   }
 
   return await new Promise((resolve, reject) => {
