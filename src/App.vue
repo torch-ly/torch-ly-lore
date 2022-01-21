@@ -1,4 +1,8 @@
 <template>
+
+  <!-- Define Popups -->
+  <AddNPC />
+
   <router-view/>
 </template>
 <style>
@@ -12,3 +16,9 @@ html {
 }
 
 </style>
+<script>
+import AddNPC from "@/components/Popups/AddNPC";
+export default {
+  components: {AddNPC}
+}
+</script>
