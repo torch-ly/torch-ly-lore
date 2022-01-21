@@ -1,6 +1,16 @@
 <template>
   <NavBar>
-    <template v-slot:header>{{ npc?.name }}</template>
+    <template v-slot:header>
+      <div class="flex justify-between">
+        {{ npc?.name }}
+        <button @click="$router.push({query: {edit: null}})" v-if="npc && canWrite(npc.permissionWrite) && $route.query.edit === undefined" type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          Edit Character
+        </button>
+        <button @click="$router.push($route.path)" v-if="npc && canWrite(npc.permissionWrite) && $route.query.edit !== undefined" type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          Leave Edit
+        </button>
+      </div>
+    </template>
     <template v-slot:body>
       <div v-if="npc != null">
         <div @click="$router.push($route.path)" v-if="$route.query.edit !== undefined && !canWrite(npc.permissionWrite)" class="mt-52 text-center">

@@ -60,7 +60,6 @@ export default createStore({
 
         let validArray = ['true'];
         if (state.user) {
-          console.log(state.user.uid);
           validArray.push(state.user.uid);
         }
 
