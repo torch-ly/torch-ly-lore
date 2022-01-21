@@ -12,7 +12,7 @@
 
     <div class="-mt-px flex divide-x divide-gray-200 border-t">
       <div v-if="editable" class="w-0 flex-1 flex">
-        <button @click="edit" class="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-3 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+        <button @click="edit" class="relative w-0 flex-1 inline-flex items-center justify-center py-3 text-sm text-gray-700 font-medium border-r border-transparent hover:border-gray-200 rounded-bl-lg hover:text-gray-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
           <PencilIcon class="w-5 h-5 text-gray-400" aria-hidden="true" />
           <span class="ml-3">Edit</span>
         </button>
@@ -39,7 +39,6 @@ export default {
       type: String,
       default: '',
     },
-    // TODO bind this parameter
     editable: {
       type: Boolean,
       default: false,
@@ -51,8 +50,7 @@ export default {
   },
   methods: {
     edit() {
-      console.error("not yet implemented");
-      this.$router.push(this.route);
+      this.$router.push({path: this.route, query: {edit: null}});
     },
     view() {
       this.$router.push(this.route);
