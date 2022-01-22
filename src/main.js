@@ -18,3 +18,4 @@ createApp(App)
     .mount('#app')
 
 store.dispatch("handleLogin");
+store.dispatch("bindUsers")

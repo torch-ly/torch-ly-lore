@@ -1,130 +1,152 @@
-import { createStore } from 'vuex'
+import {createStore} from 'vuex'
 import {collection, doc, onSnapshot, query, where} from "firebase/firestore";
-import { signOut } from "firebase/auth";
+import {signOut} from "firebase/auth";
 import {auth, db} from "@/plugins/firebase";
 import router from "@/router";
 import {npcConverter} from "@/plugins/collections/npcs";
 
 export default createStore({
-  state: {
-    npcs: [],
-    _npcListener: null,
-    campaignData: [],
-    _campaignDataListener: null,
-    campaign: null,
-    user: null
-  },
-  getters: {
-  },
-  mutations: {
-    setUser (state, user) {
-      state.user = user;
+    state: {
+        npcs: [],
+        _npcListener: null,
+        campaignData: [],
+        _campaignDataListener: null,
+        campaign: null,
+        user: null,
+        users: [],
     },
-    setCampaign (state, campaign) {
-      state.campaign = campaign;
-    },
-    setNpcs (state, npcs) {
-      state.npcs = npcs;
-    },
-    setNpcListener (state, listener) {
-      state._npcListener = listener;
-    },
-    setCampaignData (state, data) {
-      state.campaignData = data;
-    },
-    setCampaignDataListener (state, listener) {
-      state._campaignDataListener = listener;
-    },
-    logout(state) {
-      state.user = null;
-      state.isLoggedIn = false;
-      signOut(auth).then(() => {
-      }).catch((error) => {
-        console.log(error)
-      });
-    }
-  },
-  actions: {
-    async bindNpcs ({commit, state, dispatch}) {
-
-      if (router.currentRoute.value.params.campaign !== state.campaign) {
-        await dispatch('unbind');
-      }
-
-      if (state._npcListener === null) {
-        let campaign = router.currentRoute.value.params.campaign + "";
-
-        commit('setCampaign', campaign);
-
-        const NPC_COLLECTION = collection(db, "campaigns", campaign, "npcs").withConverter(npcConverter);
-
-        let validArray = ['default'];
-        if (state.user) {
-          validArray.push(state.user.uid);
-
-          if (state.campaignData.users?.includes(state.user.uid)) {
-            validArray.push("users");
-          }
+    getters: {},
+    mutations: {
+        setUser(state, user) {
+            state.user = user;
+        },
+        setUsers(state, users) {
+            state.users = users;
+        },
+        setCampaign(state, campaign) {
+            state.campaign = campaign;
+        },
+        setNpcs(state, npcs) {
+            state.npcs = npcs;
+        },
+        setNpcListener(state, listener) {
+            state._npcListener = listener;
+        },
+        setCampaignData(state, data) {
+            state.campaignData = data;
+        },
+        setCampaignDataListener(state, listener) {
+            state._campaignDataListener = listener;
+        },
+        logout(state) {
+            state.user = null;
+            state.isLoggedIn = false;
+            signOut(auth).then(() => {
+            }).catch((error) => {
+                console.log(error)
+            });
         }
-
-        let listener = onSnapshot(query(NPC_COLLECTION, where('permissionRead', 'array-contains-any', validArray)), (snapshot) => {
-          commit('setNpcs', snapshot.docs.map(doc => {return doc.data()}));
-        });
-        commit('setNpcListener', listener);
-
-      }
-
     },
-    async bindCampaignData ({commit, state, dispatch}) {
+    actions: {
+        async bindNpcs({commit, state, dispatch}) {
 
-      if (router.currentRoute.value.params.campaign !== state.campaign) {
-        await dispatch('unbind');
-      }
+            if (router.currentRoute.value.params.campaign !== state.campaign) {
+                await dispatch('unbind');
+            }
 
-      if (state._npcListener === null) {
-        let campaign = router.currentRoute.value.params.campaign + "";
+            if (state._npcListener === null) {
+                let campaign = router.currentRoute.value.params.campaign + "";
 
-        commit('setCampaign', campaign);
+                commit('setCampaign', campaign);
 
-        const DOC = doc(db, "campaigns", campaign);
+                const NPC_COLLECTION = collection(db, "campaigns", campaign, "npcs").withConverter(npcConverter);
 
-        let listener = onSnapshot(DOC, async (doc) => {
-          commit('setCampaignData', doc.data());
+                let validArray = ['default'];
+                if (state.user) {
+                    validArray.push(state.user.uid);
 
-          // TODO change this! This consumes a lot of resources
-          await state._npcListener();
-          commit('setNpcListener', null);
+                    if (state.campaignData.users?.includes(state.user.uid)) {
+                        validArray.push("users");
+                    }
+                }
 
-          dispatch('bindNpcs');
-        });
+                let listener = onSnapshot(query(NPC_COLLECTION, where('permissionRead', 'array-contains-any', validArray)), (snapshot) => {
+                    commit('setNpcs', snapshot.docs.map(doc => {
+                        return doc.data()
+                    }));
+                });
+                commit('setNpcListener', listener);
 
-        commit('setCampaignDataListener', listener);
+            }
 
-      }
+        },
+        async bindCampaignData({commit, state, dispatch}) {
 
-    },
-    async unbind({commit, state}) {
-      if (state._npcListener != null) await state._npcListener();
-      commit('setNpcListener', null);
+            if (router.currentRoute.value.params.campaign !== state.campaign) {
+                await dispatch('unbind');
+            }
 
-      if (state._campaignDataListener != null) await state._campaignDataListener();
-      commit('setCampaignDataListener', null);
-    },
-    handleLogin(context) {
-      auth.onAuthStateChanged(async user => {
-        if (user) {
-          await context.commit('setUser', user);
+            if (state._npcListener === null) {
+                let campaign = router.currentRoute.value.params.campaign + "";
 
-          // TODO change this! This consumes a lot of resources
-          await context.state._npcListener();
-          context.commit('setNpcListener', null);
+                commit('setCampaign', campaign);
 
-          context.dispatch('bindNpcs');
+                const DOC = doc(db, "campaigns", campaign);
 
-        } else {
-          await context.commit('setUser', null);
+                let listener = onSnapshot(DOC, async (doc) => {
+                    commit('setCampaignData', doc.data());
+
+                    // TODO change this! This consumes a lot of resources
+                    await state._npcListener();
+                    commit('setNpcListener', null);
+
+                    dispatch('bindNpcs');
+                });
+
+                commit('setCampaignDataListener', listener);
+
+            }
+
+        },
+        async bindUsers({commit}) {
+
+            // TODO set limit
+            const USERS_COLLECTION = collection(db, "users");
+
+            onSnapshot(query(USERS_COLLECTION), (snapshot) => {
+                commit('setUsers', snapshot.docs.map(doc => {
+                    let data = {
+                        id: doc.id,
+                        ...doc.data()
+                    }
+                    console.log(data);
+                    return data
+                }));
+            });
+
+        },
+        async unbind({commit, state}) {
+            if (state._npcListener != null) await state._npcListener();
+            commit('setNpcListener', null);
+
+            if (state._campaignDataListener != null) await state._campaignDataListener();
+            commit('setCampaignDataListener', null);
+        },
+        handleLogin(context) {
+            auth.onAuthStateChanged(async user => {
+                if (user) {
+                    await context.commit('setUser', user);
+
+                    // TODO change this! This consumes a lot of resources
+                    await context.state._npcListener();
+                    context.commit('setNpcListener', null);
+
+                    context.dispatch('bindNpcs');
+
+                } else {
+                    await context.commit('setUser', null);
+                }
+            })
         }
-      })
     }
-  }
 })

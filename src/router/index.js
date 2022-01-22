@@ -3,7 +3,10 @@ import HomeView from '../views/Home.vue'
 import Campaign from '../views/Campaign.vue'
 import Npcs from '../views/NPC/Npcs.vue'
 import Npc from '../views/NPC/Npc.vue'
+import DocumentSettings from '../views/DocumentSettings.vue'
 import store from "@/store";
+
+const Setting = () => import('../views/Settings.vue');
 
 const routes = [
     {
@@ -22,6 +25,11 @@ const routes = [
         component: Campaign
     },
     {
+        path: '/w/:campaign/settings',
+        name: 'Campaign Settings',
+        component: Setting
+    },
+    {
         path: '/w/:campaign/npcs',
         name: 'Npcs',
         component: Npcs
@@ -30,7 +38,13 @@ const routes = [
         path: '/w/:campaign/npc/:id',
         name: 'Npc details',
         component: Npc
-    }
+    },
+    {
+        path: '/w/:campaign/:type/:id/settings',
+        name: 'Document settings',
+        component: DocumentSettings
+    },
+
 ]
 
 const router = createRouter({

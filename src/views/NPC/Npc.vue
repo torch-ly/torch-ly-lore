@@ -36,10 +36,10 @@
 </template>
 <script>
 import NavBar from "@/components/NavBar";
-import TextEdit from "@/components/TextEdit";
+import TextEdit from "@/components/InputFields/TextEdit";
 import {updateDoc, deleteDoc} from "firebase/firestore";
 import {canWrite} from "@/plugins/permissions";
-import LineEdit from "@/components/LineEdit";
+import LineEdit from "@/components/InputFields/LineEdit";
 import {getConfirmation} from "@/components/Popups/Confirmation";
 
 export default {

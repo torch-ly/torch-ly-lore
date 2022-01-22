@@ -95,7 +95,7 @@
                 <MenuItems class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
                     <div v-if="item.name === 'Sign out'" @click="$store.commit('logout')" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">{{ item.name }}</div>
-                    <a v-else :href="item.href" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">{{ item.name }}</a>
+                    <router-link v-else :to="item.route" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">{{ item.name }}</router-link>
                   </MenuItem>
                 </MenuItems>
               </transition>
@@ -153,8 +153,8 @@ let navigation = [
 ]
 
 const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
+  { name: 'Your Profile', route: {name: 'Campaign Settings'} },
+  { name: 'Settings', route: {name: 'Campaign Settings'} },
   { name: 'Sign out', href: '#' },
 ]
 
