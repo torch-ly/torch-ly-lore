@@ -5,6 +5,6 @@ export function canWrite(permissions) {
         return true;
     }
 
-    return permissions.includes(store.state.user?.uid);
+    return store.state.user != null && permissions.includes(store.state.user.uid);
 
 }

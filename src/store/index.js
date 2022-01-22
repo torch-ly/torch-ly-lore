@@ -58,9 +58,13 @@ export default createStore({
 
         const NPC_COLLECTION = collection(db, "campaigns", campaign, "npcs").withConverter(npcConverter);
 
-        let validArray = ['true'];
+        let validArray = ['default'];
         if (state.user) {
           validArray.push(state.user.uid);
+
+          if (state.campaignData.users?.includes(state.user.uid)) {
+            validArray.push("users");
+          }
         }
 
         let listener = onSnapshot(query(NPC_COLLECTION, where('permissionRead', 'array-contains-any', validArray)), (snapshot) => {
@@ -86,6 +90,12 @@ export default createStore({
 
         let listener = onSnapshot(DOC, async (doc) => {
           commit('setCampaignData', doc.data());
+
+          // TODO change this! This consumes a lot of resources
+          await state._npcListener();
+          commit('setNpcListener', null);
+
+          dispatch('bindNpcs');
         });
 
         commit('setCampaignDataListener', listener);
