@@ -1,10 +1,8 @@
-import 'firebase/firestore'
-import 'firebase/auth'
 import { initializeApp } from "firebase/app"
 import { getAuth } from "firebase/auth"
 import {getFirestore} from "firebase/firestore"
 import { GoogleAuthProvider } from "firebase/auth"
-const { initializeAppCheck, ReCaptchaV3Provider } = require("firebase/app-check");
+import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
 const firebaseApp = initializeApp({
     apiKey: process.env.VUE_APP_API_KEY,
