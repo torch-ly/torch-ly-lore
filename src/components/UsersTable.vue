@@ -1,7 +1,6 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <template>
-  {{campaignUsers}}
-  <div class="flex flex-col">
+  <div class="flex flex-col" v-if="$store.state.user != null || isGM || isUser">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
         <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
@@ -12,39 +11,32 @@
                 Name
               </th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Title
-              </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Status
               </th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Role
               </th>
-              <th scope="col" class="relative px-6 py-3">
+              <th v-if="isGM" scope="col" class="relative px-6 py-3">
                 <span class="sr-only">Edit</span>
               </th>
             </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="person in people" :key="person.email">
+            <tr v-for="user in campaignUsers" :key="user.uid">
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center">
                   <div class="flex-shrink-0 h-10 w-10">
-                    <img class="h-10 w-10 rounded-full" :src="person.image" alt="" />
+                    <img class="h-10 w-10 rounded-full" :src="user.photoURL" alt="" />
                   </div>
                   <div class="ml-4">
                     <div class="text-sm font-medium text-gray-900">
-                      {{ person.name }}
+                      {{ user.displayName }}
                     </div>
                     <div class="text-sm text-gray-500">
-                      {{ person.email }}
+                      {{ user.email }}
                     </div>
                   </div>
                 </div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">{{ person.title }}</div>
-                <div class="text-sm text-gray-500">{{ person.department }}</div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
                   <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
@@ -52,10 +44,10 @@
                   </span>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {{ person.role }}
+                {{ user.role }}
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+              <td v-if="isGM" class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <button class="text-indigo-600 hover:text-indigo-900" @click="edit">Edit</button>
               </td>
             </tr>
             </tbody>
@@ -64,43 +56,53 @@
       </div>
     </div>
   </div>
+  <div v-else class="mt-52 text-center">
+    <span class="text-5xl">You are not allowed to be here!</span>
+    <button @click="$router.push({name: 'Campaign Home'})"  type="button" class="block mx-auto mt-12 items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+      Go back
+    </button>
+  </div>
 </template>
 
 <script>
-import {auth, db} from "@/plugins/firebase";
-import {doc} from "firebase/firestore";
 
-const people = [
-  {
-    name: 'Jane Cooper',
-    title: 'Regional Paradigm Technician',
-    department: 'Optimization',
-    role: 'Admin',
-    email: 'jane.cooper@example.com',
-    image:
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-  },
-  // More people...
-]
+import {editUser} from "@/components/Popups/EditUser";
 
 export default {
-  setup() {
-    return {
-      people,
-    }
-  },
   computed: {
     campaignUsers() {
       let out = [];
       if (this.$store.state.campaignData.users == null) {
         return out;
       }
+
+      for (let cUsers of this.$store.state.campaignData.gms) {
+        out.push({
+          role: "GM",
+          ...this.$store.state.users.find((u) => u.id === cUsers)
+        });
+      }
+
       for (let cUsers of this.$store.state.campaignData.users) {
-        out.push(this.$store.state.users.find((u) => u.id === cUsers));
+        out.push({
+          role: "User",
+          ...this.$store.state.users.find((u) => u.id === cUsers)
+        });
       }
 
       return out;
+
     },
+    isGM() {
+      return this.$store.state.campaignData.gms?.includes(this.$store.state.user?.uid);
+    },
+    isUser() {
+      return this.$store.state.campaignData.users?.includes(this.$store.state.user?.uid);
+    },
+    edit(user) {
+      // TODO: Add editUser
+      console.log("Edit user not implemented");
+    }
   }
 }
 </script>

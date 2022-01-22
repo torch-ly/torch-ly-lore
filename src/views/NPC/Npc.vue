@@ -16,9 +16,9 @@
     </template>
     <template v-slot:body>
       <div v-if="npc != null">
-        <div @click="$router.push($route.path)" v-if="$route.query.edit !== undefined && !canWrite(npc.permissionWrite)" class="mt-52 text-center">
+        <div v-if="$route.query.edit !== undefined && !canWrite(npc.permissionWrite)" class="mt-52 text-center">
           <span class="text-5xl">You are not allowed to be here!</span>
-          <button type="button" class="block mx-auto mt-12 items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          <button @click="$router.push($route.path)"  type="button" class="block mx-auto mt-12 items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             Go back
           </button>
         </div>

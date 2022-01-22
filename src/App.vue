@@ -2,6 +2,7 @@
 
   <!-- Define Popups -->
   <AddNPC />
+  <EditUser />
   <Confirmation />
 
   <router-view/>
@@ -20,7 +21,8 @@ html {
 <script>
 import AddNPC from "@/components/Popups/AddNPC";
 import Confirmation from "@/components/Popups/Confirmation";
+import EditUser from "@/components/Popups/EditUser";
 export default {
-  components: {Confirmation, AddNPC}
+  components: {EditUser, Confirmation, AddNPC}
 }
 </script>
