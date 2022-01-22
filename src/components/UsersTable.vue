@@ -16,8 +16,9 @@
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Role
               </th>
-              <th v-if="isGM" scope="col" class="relative px-6 py-3">
+              <th v-if="isGM" scope="col" class="relative px-6 py-3 text-right text-gray-900">
                 <span class="sr-only">Edit</span>
+                <font-awesome-icon class="mr-1" icon="plus" @click="addNewUser" />
               </th>
             </tr>
             </thead>
@@ -67,6 +68,7 @@
 <script>
 
 import {editUser} from "@/components/Popups/EditUser";
+import {notify} from "@/components/Notification";
 
 export default {
   computed: {
@@ -98,11 +100,17 @@ export default {
     },
     isUser() {
       return this.$store.state.campaignData.users?.includes(this.$store.state.user?.uid);
-    },
+    }
+  },
+  methods: {
     edit(user) {
       // TODO: Add editUser
       console.log("Edit user not implemented");
+    },
+    addNewUser() {
+      notify("Created invite link.", "Copy", () => {console.log("Copied!")});
     }
   }
+
 }
 </script>
