@@ -1,0 +1,48 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    match /users/{document=**} {
+    // TODO allow only if you are part of this collection
+    	allow read: if true;
+    }
+    
+    match /campaigns/{campaign} {
+    	allow read: if true;
+    }
+    
+    match /campaigns/{campaign}/npcs {
+    	allow read: if true;
+    }
+    
+    match /campaigns/{campaign}/npcs/{document=**} {
+  
+  		function users() {
+      	return get(/databases/$(database)/documents/campaigns/$(campaign)).data.users
+      }
+      
+      function isUser() {
+      	return request.auth != null && request.auth.uid in users()
+      }
+  
+  		// returns true iff the user has suffizient permissions for a document
+  		function authorised(doc) {
+      	// The 0 entry identifies the default value
+      	// The 1 entry identifies the value for campaign users
+        // The other entrys are user ids
+    		return 
+        	'default' in doc ||
+          ('users' in doc && isUser()) || 
+          (request.auth != null && request.auth.uid in doc)
+    	}
+      
+      // allow read: if true
+      allow get, list: if authorised(resource.data.permissionRead);
+			// TODO: disallow changes in permission    
+    	allow update, delete: if authorised(resource.data.permissionWrite);
+      
+      // All users of the campaign shell be able to create any document
+      allow create: if isUser()
+    }
+  }
+}
