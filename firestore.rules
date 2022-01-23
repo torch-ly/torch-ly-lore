@@ -17,37 +17,45 @@ service cloud.firestore {
 
     match /campaigns/{campaign}/npcs/{document=**} {
 
-      	function users() {
-          	return get(/databases/$(database)/documents/campaigns/$(campaign)).data.users
-        }
+  		function users() {
+      	return get(/databases/$(database)/documents/campaigns/$(campaign)).data.users
+      }
 
-        function gms() {
-          	return get(/databases/$(database)/documents/campaigns/$(campaign)).data.gms
-        }
+      function gms() {
+      	return get(/databases/$(database)/documents/campaigns/$(campaign)).data.gms
+      }
 
-        function isUser() {
-          	return request.auth != null && request.auth.uid in users()
-        }
+      function isUser() {
+      	return request.auth != null && request.auth.uid in users()
+      }
 
-        function isGM() {
-          	return request.auth != null && request.auth.uid in gms()
-        }
+  		function isGM() {
+      	return request.auth != null && request.auth.uid in gms()
+      }
 
-      	// returns true iff the user has suffizient permissions for a document
-      	function authorised(doc) {
-        	return
-            'default' in doc ||
-            ('users' in doc && isUser()) ||
-            (request.auth != null && request.auth.uid in doc) ||
-            isGM()
-        }
+  		// returns true iff the user has suffizient permissions for a document
+  		function authorised(doc) {
+    		return
+        	'default' in doc ||
+          ('users' in doc && isUser()) ||
+          (request.auth != null && request.auth.uid in doc) ||
+          isGM()
+    	}
 
-        allow get, list: if authorised(resource.data.permissionRead);
-    	// TODO: disallow changes in permission
-        allow update, delete: if authorised(resource.data.permissionWrite);
+      function permissionFieldChanged() {
+      	return request.resource.data.diff(resource.data).affectedKeys().hasAny(['permissionRead', 'permissionWrite'])
+      }
 
-        // All users of the campaign shell be able to create any document
-        allow create: if isUser() || isGM()
+      function allowedPermissionChange() {
+      	return !permissionFieldChanged() || isGM();
+      }
+
+      allow get, list: if authorised(resource.data.permissionRead);
+
+    	allow update, delete: if allowedPermissionChange() && authorised(resource.data.permissionWrite);
+
+      // All users of the campaign shell be able to create any document
+      allow create: if isUser() || isGM()
     }
   }
 }
