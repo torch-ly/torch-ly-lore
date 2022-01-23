@@ -9,13 +9,20 @@ export default createStore({
     state: {
         npcs: [],
         _npcListener: null,
-        campaignData: [],
+        campaignData: null,
         _campaignDataListener: null,
         campaign: null,
         user: null,
         users: [],
     },
-    getters: {},
+    getters: {
+        isGM: state => {
+            return state.campaignData?.gms.includes(state.user?.uid);
+        },
+        isUser: state => {
+            return state.campaignData?.users.includes(state.user?.uid)
+        }
+    },
     mutations: {
         setUser(state, user) {
             state.user = user;
@@ -48,7 +55,7 @@ export default createStore({
         }
     },
     actions: {
-        async bindNpcs({commit, state, dispatch}) {
+        async bindNpcs({commit, state, dispatch, getters}) {
 
             if (router.currentRoute.value.params.campaign !== state.campaign) {
                 await dispatch('unbind');
@@ -70,7 +77,13 @@ export default createStore({
                     }
                 }
 
-                let listener = onSnapshot(query(NPC_COLLECTION, where('permissionRead', 'array-contains-any', validArray)), (snapshot) => {
+                // GMs are allowed to read all fields
+                let queryArgument = query(NPC_COLLECTION, where('permissionRead', 'array-contains-any', validArray));
+                if (getters.isGM) {
+                    queryArgument = query(NPC_COLLECTION)
+                }
+
+                let listener = onSnapshot(queryArgument, (snapshot) => {
                     commit('setNpcs', snapshot.docs.map(doc => {
                         return doc.data()
                     }));
