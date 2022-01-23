@@ -1,22 +1,25 @@
 <template>
   <div class="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
-      <img class="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow" />
+      <img class="mx-auto h-12 w-auto" src="../assets/Torchly-lore.png" alt="Workflow" />
       <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-        Sign in to your account
+        {{ register ? "Create an account" : "Sign in to your account" }}
       </h2>
-      <p class="mt-2 text-center text-sm text-gray-600">
-        Or
-        {{ ' ' }}
-        <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
-          start your 14-day free trial
-        </a>
-      </p>
     </div>
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
       <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-        <form class="space-y-6" action="#" method="POST">
+
+        <div class="flex items-center mb-4" v-if="!register">
+          <div class="text-sm">
+            Don't have an account?
+            <router-link to="register" replace class="font-medium text-indigo-600 hover:text-indigo-500">
+              Create one
+            </router-link>
+          </div>
+        </div>
+
+        <form @submit.prevent="register ? createWithEmail() : signInWithEmail()" class="space-y-6">
           <div>
             <label for="email" class="block text-sm font-medium text-gray-700">
               Email address
@@ -35,24 +38,25 @@
             </div>
           </div>
 
-          <div class="flex items-center justify-between">
-            <div class="flex items-center">
-              <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
-              <label for="remember-me" class="ml-2 block text-sm text-gray-900">
-                Remember me
-              </label>
-            </div>
-
+          <div class="flex items-center justify-end" v-if="!register">
             <div class="text-sm">
-              <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
+              <a @click="resetPassword" class="font-medium text-indigo-600 hover:text-indigo-500">
                 Forgot your password?
               </a>
             </div>
           </div>
 
+          <div class="flex items-center justify-end" v-else>
+            <div class="text-sm">
+              <router-link to="login" replace class="font-medium text-indigo-600 hover:text-indigo-500">
+                Already have an account?
+              </router-link>
+            </div>
+          </div>
+
           <div>
-            <button type="button" @click="signInEmail" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-              Sign in
+            <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              {{ register ? 'Create account' : 'Sign in' }}
             </button>
           </div>
         </form>
@@ -79,10 +83,13 @@
         </div>
       </div>
     </div>
+
+    <span class="text-center mt-2 text-red-500">{{error}}</span>
+
   </div>
 </template>
 <script>
-import {GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword} from 'firebase/auth'
+import {GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail} from 'firebase/auth'
 import {auth, googleProvider} from '@/plugins/firebase'
 import store from "@/store";
 
@@ -91,6 +98,7 @@ export default {
     return {
       email: '',
       password: '',
+      error: '',
     }
   },
   methods: {
@@ -106,8 +114,7 @@ export default {
             const errorMessage = error.message;
       });
     },
-    signInEmail() {
-      console.log(this.email, this.password);
+    createWithEmail() {
       createUserWithEmailAndPassword(auth, this.email, this.password)
           .then((userCredential) => {
             // Signed in
@@ -116,12 +123,36 @@ export default {
             // ...
           })
           .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // ..
+            this.error = error;
           });
+    },
+    signInWithEmail() {
+      signInWithEmailAndPassword(auth, this.email, this.password).then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        this.$router.back();
+        // ...
+      }).catch((error) => {
+        this.error = error;
+      });
+    },
+    resetPassword() {
+      if (!this.email) {
+        this.error = 'Please enter your email';
+        return;
+      }
 
+      sendPasswordResetEmail(auth, this.email).then(() => {
+        this.error = 'Password reset email sent';
+      }).catch((error) => {
+        this.error = error;
+      });
     }
   },
+  computed: {
+    register() {
+      return this.$route.name === 'register';
+    }
+  }
 }
 </script>
