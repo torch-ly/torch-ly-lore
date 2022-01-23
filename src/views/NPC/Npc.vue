@@ -3,11 +3,14 @@
     <template v-slot:header>
       <div class="flex justify-between">
         {{ npc?.name }}
-        <button @click="$router.push({query: {edit: null}})" v-if="npc && canWrite(npc.permissionWrite) && $route.query.edit === undefined" type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        <button @click="$router.push({query: {edit: null}})" v-if="npc && writePermission(npc.permissionWrite) && $route.query.edit === undefined" type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
           Edit Character
         </button>
-        <div v-if="npc && canWrite(npc.permissionWrite) && $route.query.edit !== undefined" class="flex justify-between">
-          <button @click="$router.push($route.path)" type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        <div v-if="npc && writePermission(npc.permissionWrite) && $route.query.edit !== undefined" class="flex justify-between">
+          <button v-if="$store.getters.isGM" @click="$router.push({name: 'Document settings', params: {type: 'npc'}})" type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            Edit Permissions
+          </button>
+          <button @click="$router.push($route.path)" type="button" class="ml-2 inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             Leave Edit
           </button>
           <div @click="removeNPC" class="pt-1 mx-3 text-red-500"><font-awesome-icon icon="trash" /></div>
@@ -16,7 +19,7 @@
     </template>
     <template v-slot:body>
       <div v-if="npc != null">
-        <div v-if="$route.query.edit !== undefined && !canWrite(npc.permissionWrite)" class="mt-52 text-center">
+        <div v-if="$route.query.edit !== undefined && !writePermission(npc.permissionWrite)" class="mt-52 text-center">
           <span class="text-5xl">You are not allowed to be here!</span>
           <button @click="$router.push($route.path)"  type="button" class="block mx-auto mt-12 items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             Go back
@@ -24,10 +27,10 @@
         </div>
         <div v-else>
           <div v-if="npc" v-for="(desc, id) in npc.description">
-            <LineEdit :editable="$route.query.edit !== undefined && canWrite(npc.permissionWrite)" class="my-5" v-model:value="desc.title" @blur="updateDescription" :remove="() => removeDescription(id)"/>
-            <TextEdit :editable="$route.query.edit !== undefined && canWrite(npc.permissionWrite)" class="my-2" v-model:value="desc.content" @blur="updateDescription"/>
+            <LineEdit :editable="$route.query.edit !== undefined && writePermission(npc.permissionWrite)" class="my-5" v-model:value="desc.title" @blur="updateDescription" :remove="() => removeDescription(id)"/>
+            <TextEdit :editable="$route.query.edit !== undefined && writePermission(npc.permissionWrite)" class="my-2" v-model:value="desc.content" @blur="updateDescription"/>
           </div>
-          <div v-if="$route.query.edit !== undefined && canWrite(npc.permissionWrite)" @click="npc.description.push({title: 'New Section', content: ''})" class="w-full text-center bg-gray-50 text-gray-900 border shadow py-2 mt-5"><font-awesome-icon size="2x" icon="plus" /></div>
+          <div v-if="$route.query.edit !== undefined && writePermission(npc.permissionWrite)" @click="npc.description.push({title: 'New Section', content: ''})" class="w-full text-center bg-gray-50 text-gray-900 border shadow py-2 mt-5"><font-awesome-icon size="2x" icon="plus" /></div>
         </div>
       </div>
     </template>
@@ -70,7 +73,10 @@ export default {
       }).catch(() => {
         // Do nothing
       });
+    },
+    writePermission(permissions) {
+      return this.$store.getters.isGM || this.canWrite(permissions);
     }
-  }
+  },
 }
 </script>

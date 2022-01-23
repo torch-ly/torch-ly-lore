@@ -53,7 +53,7 @@ const routes = [
     {
         path: '/w/:campaign/:type/:id/settings',
         name: 'Document settings',
-        component: DocumentSettings
+        component: () => import('../views/DocumentSettings.vue')
     },
     {
         path: "/:catchAll(.*)",
