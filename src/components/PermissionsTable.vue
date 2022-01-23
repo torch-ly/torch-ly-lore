@@ -103,6 +103,41 @@
                 <div @click="remove" class="text-red-500 text-lg"><font-awesome-icon icon="trash" /></div>
               </td>
             </tr>
+
+            <!-- Space -->
+            <tr><td></td><td></td><td></td></tr>
+
+            <!-- Other User rows -->
+            <tr v-for="user in otherUsers" :key="user.uid">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0 h-10 w-10">
+                    <img class="h-10 w-10 rounded-full" :src="user.photoURL" alt="" />
+                  </div>
+                  <div class="ml-4">
+                    <div class="text-sm font-medium text-gray-900">
+                      {{ user.displayName }}
+                    </div>
+                    <div class="text-sm text-gray-500">
+                      {{ user.email }}
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <div>
+                  <select @change="addPermissions(user.uid, $event.target.value)" class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                    <option selected="">No Special</option>
+                    <option>Read</option>
+                    <option>Write</option>
+                  </select>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <div @click="remove" class="text-red-500 text-lg"><font-awesome-icon icon="trash" /></div>
+              </td>
+            </tr>
+
             </tbody>
           </table>
         </div>
@@ -148,7 +183,6 @@ export default {
       }
 
       for (let user of this.item.permissionWrite.slice(2)) {
-        console.log(user);
         for (let readPart of direct) {
           if (readPart.user.id === user) {
             readPart.write = true;
@@ -157,6 +191,22 @@ export default {
       }
 
       return direct;
+    },
+    otherUsers() {
+      let uids = this.$store.state.campaignData?.users
+
+      if (!uids) return [];
+
+      let users = [];
+
+      for (let uid of uids) {
+        if (this.item.permissionRead.includes(uid) || this.item.permissionWrite.includes(uid)) {
+          continue;
+        }
+        users.push(this.$store.state.users.find(user => user.uid === uid));
+      }
+
+      return users;
     }
   },
   methods: {
@@ -196,6 +246,20 @@ export default {
         this.item.permissionWrite.push(userId);
       } else {
         this.item.permissionWrite.splice(this.item.permissionWrite.indexOf(userId), 1);
+      }
+
+      this.$emit('update', {
+        permissionRead: this.item.permissionRead,
+        permissionWrite: this.item.permissionWrite
+      });
+
+    },
+    addPermissions(userId, value) {
+      if (value === "Write") {
+        this.item.permissionRead.push(userId);
+        this.item.permissionWrite.push(userId);
+      } else {
+        this.item.permissionRead.push(userId);
       }
 
       this.$emit('update', {
