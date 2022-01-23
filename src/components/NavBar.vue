@@ -84,7 +84,7 @@
             </button>
 
             <!-- Profile dropdown -->
-            <Menu v-if="$store.state.user !== null" as="div" class="ml-3 relative">
+            <Menu v-if="$store.state.user != null" as="div" class="ml-3 relative">
               <div>
                 <MenuButton class="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                   <span class="sr-only">Open user menu</span>

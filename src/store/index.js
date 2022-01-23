@@ -65,7 +65,7 @@ export default createStore({
                 if (state.user) {
                     validArray.push(state.user.uid);
 
-                    if (state.campaignData.users?.includes(state.user.uid)) {
+                    if (state.campaignData?.users?.includes(state.user.uid)) {
                         validArray.push("users");
                     }
                 }
@@ -136,16 +136,15 @@ export default createStore({
             auth.onAuthStateChanged(async user => {
                 if (user) {
                     await context.commit('setUser', user);
-
-                    // TODO change this! This consumes a lot of resources
-                    await context.state._npcListener();
-                    context.commit('setNpcListener', null);
-
-                    context.dispatch('bindNpcs');
-
                 } else {
                     await context.commit('setUser', null);
                 }
+
+                // TODO change this! This consumes a lot of resources
+                await context.state?._npcListener();
+                context.commit('setNpcListener', null);
+
+                context.dispatch('bindNpcs');
             })
         }
     }
