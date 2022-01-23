@@ -42,6 +42,20 @@ admin.initializeApp();
 
 // create a new user when they sign up
 exports.createUserObject = functions.auth.user().onCreate(async (user) => {
+
+    if (!user.email) {
+        user.email = "Please contact a dev. You should have an email!!!";
+    }
+
+    if(!user.displayName) {
+        user.displayName = user.email.split("@")[0].toLowerCase().split(".").join("_").split("_").map((word) => word[0].toUpperCase() + word.slice(1)).join(" ")
+    }
+
+    if(!user.photoURL) {
+        user.photoURL = "https://eu.ui-avatars.com/api/?name=" + user.email
+    }
+
+
     await admin.firestore().collection("users").doc(user.uid).set({
         uid: user.uid,
         email: user.email,
