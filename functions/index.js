@@ -103,16 +103,16 @@ exports.joinCampaign = functions.https.onCall(async (data, context) => {
         throw new functions.https.HttpsError('not-found', 'The invite does not exist.');
     }
 
-    let otherUsers = (await admin.firestore().collection('campaigns').doc(campaign + "").get()).data().users;
-    if (otherUsers.includes(context.auth.uid)) {
+    let {users, gms} = (await admin.firestore().collection('campaigns').doc(campaign + "").get()).data();
+    if (users.includes(context.auth.uid) || gms.includes(context.auth.uid)) {
         throw new functions.https.HttpsError('failed-precondition', 'You are already in this campaign.');
     }
 
     await admin.firestore().collection('campaigns').doc(campaign + "").collection("invites").doc(key + "").delete();
 
-    otherUsers.push(context.auth.uid);
+    users.push(context.auth.uid);
     await admin.firestore().collection('campaigns').doc(campaign + "").update({
-        users: otherUsers
+        users: users
     });
 
     functions.logger.log("User " + context.auth.uid + " joined campaign:", campaign);
