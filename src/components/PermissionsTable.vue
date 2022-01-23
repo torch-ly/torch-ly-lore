@@ -133,9 +133,7 @@
                   </select>
                 </div>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <div @click="remove" class="text-red-500 text-lg"><font-awesome-icon icon="trash" /></div>
-              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium" />
             </tr>
 
             </tbody>
