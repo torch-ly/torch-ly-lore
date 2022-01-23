@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app"
 import { getAuth } from "firebase/auth"
 import {getFirestore} from "firebase/firestore"
+import { getFunctions } from "firebase/functions";
 import { GoogleAuthProvider } from "firebase/auth"
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
@@ -14,6 +15,7 @@ const firebaseApp = initializeApp({
 });
 export const db = getFirestore();
 export const auth = getAuth();
+
 auth.useDeviceLanguage();
 
 export const googleProvider = new GoogleAuthProvider();
@@ -26,4 +28,18 @@ const appCheck = initializeAppCheck(firebaseApp, {
     isTokenAutoRefreshEnabled: true
 });
 
-console.log(appCheck);
+export const functions = getFunctions();
+
+//
+// Remove this comment to use the local emulator for firebase
+//
+
+/*
+import {connectAuthEmulator} from "firebase/auth";
+import {connectFirestoreEmulator} from "firebase/firestore";
+import {connectFunctionsEmulator} from "firebase/functions";
+
+connectAuthEmulator(auth, 'http://localhost:9099');
+connectFunctionsEmulator(functions, 'localhost', 5001);
+connectFirestoreEmulator(db, 'localhost', 8080);
+*/

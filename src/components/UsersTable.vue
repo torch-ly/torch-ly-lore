@@ -1,5 +1,6 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <template>
+  {{$store.state.user}}
   <div class="flex flex-col" v-if="$store.state.user != null || isGM || isUser">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -69,6 +70,8 @@
 
 import {editUser} from "@/components/Popups/EditUser";
 import {notify} from "@/components/Notification";
+import {functions} from "@/plugins/firebase";
+import { httpsCallable } from "firebase/functions";
 
 export default {
   computed: {
@@ -108,7 +111,17 @@ export default {
       console.log("Edit user not implemented");
     },
     addNewUser() {
-      notify("Created invite link.", "Copy", () => {console.log("Copied!")});
+      const getInviteLink = httpsCallable(functions, 'getInviteLink');
+      const campaign = this.$route.params.campaign;
+
+
+      getInviteLink({ campaign }).then(({data}) => {
+        notify("Created invite link: " + data, "Copy", () => {
+          navigator.clipboard.writeText("https://" + location.hostname + "/w/" + campaign + "/join/?key=" + data);
+        });
+      }).catch(((error) => {
+        console.log(error);
+      }))
     }
   }
 

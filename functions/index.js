@@ -35,11 +35,14 @@ const functions = require("firebase-functions");
 * */
 
 const admin = require('firebase-admin');
+const {isGM, getUser} = require("./authorised");
+const cors = require('cors')({origin: true});
+
 admin.initializeApp();
 
 // create a new user when they sign up
 exports.createUserObject = functions.auth.user().onCreate(async (user) => {
-    await admin.firestore().collection("users" ).doc(user.uid).set({
+    await admin.firestore().collection("users").doc(user.uid).set({
         uid: user.uid,
         email: user.email,
         displayName: user.displayName,
@@ -47,6 +50,70 @@ exports.createUserObject = functions.auth.user().onCreate(async (user) => {
         createdAt: admin.firestore.FieldValue.serverTimestamp()
     });
 
-    functions.logger.log("User created:", user.uid);
+    functions.logger.log("User created:", user);
 
+});
+
+exports.getInviteLink = functions.https.onCall(async (data, context) => {
+    const campaign = data.campaign;
+
+    if (campaign === undefined || campaign === null || campaign === "") {
+        throw new functions.https.HttpsError('invalid-argument', 'The function must be called with a campaign.');
+    }
+
+    if (!context.auth) {
+        throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
+            'while authenticated.');
+    }
+
+    if (!(await isGM(context.auth.uid, campaign))) {
+        throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
+            'by a GM.');
+    }
+
+    const {id} = await admin.firestore().collection('campaigns').doc(campaign).collection("invites").add({
+        createdBy: context.auth.uid,
+        createdAt: admin.firestore.FieldValue.serverTimestamp()
+    });
+
+    functions.logger.log("Invite link created:", id);
+
+    return id;
+});
+
+exports.joinCampaign = functions.https.onCall(async (data, context) => {
+    const campaign = data.campaign;
+    const key = data.key;
+
+    if (campaign === undefined || campaign === null || campaign === "") {
+        throw new functions.https.HttpsError('invalid-argument', 'The function must be called with a campaign.');
+    }
+
+    if (key === undefined || key === null || key === "") {
+        throw new functions.https.HttpsError('invalid-argument', 'The function must be called with a key.');
+    }
+
+    if (context.auth == null) {
+        throw new functions.https.HttpsError('failed-precondition', 'The function must be called ' +
+            'while authenticated.');
+    }
+
+    const invite = await admin.firestore().collection('campaigns').doc(campaign + "").collection("invites").doc(key + "").get();
+    if (!invite.exists) {
+        throw new functions.https.HttpsError('not-found', 'The invite does not exist.');
+    }
+
+    let otherUsers = (await admin.firestore().collection('campaigns').doc(campaign + "").get()).data().users;
+    if (otherUsers.includes(context.auth.uid)) {
+        throw new functions.https.HttpsError('failed-precondition', 'You are already in this campaign.');
+    }
+
+    await admin.firestore().collection('campaigns').doc(campaign + "").collection("invites").doc(key + "").delete();
+
+    otherUsers.push(context.auth.uid);
+    await admin.firestore().collection('campaigns').doc(campaign + "").update({
+        users: otherUsers
+    });
+
+    functions.logger.log("User " + context.auth.uid + " joined campaign:", campaign);
 });

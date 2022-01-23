@@ -7,6 +7,7 @@ import DocumentSettings from '../views/DocumentSettings.vue'
 import store from "@/store";
 
 const Setting = () => import('../views/Settings.vue');
+const Join = () => import('../views/Join.vue');
 
 const routes = [
     {
@@ -28,6 +29,11 @@ const routes = [
         path: '/w/:campaign/settings',
         name: 'Campaign Settings',
         component: Setting
+    },
+    {
+        path: '/w/:campaign/join',
+        name: 'Join Campaign',
+        component: Join
     },
     {
         path: '/w/:campaign/npcs',
