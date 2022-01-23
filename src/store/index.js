@@ -132,7 +132,6 @@ export default createStore({
                         id: doc.id,
                         ...doc.data()
                     }
-                    console.log(data);
                     return data
                 }));
             });
