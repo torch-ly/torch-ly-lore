@@ -55,6 +55,11 @@ const routes = [
         name: 'Document settings',
         component: DocumentSettings
     },
+    {
+        path: "/:catchAll(.*)",
+        name: '404',
+        component: () => import('../views/404.vue')
+    }
 
 ]
 
