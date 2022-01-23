@@ -27,8 +27,8 @@
         </div>
         <div v-else>
           <div v-if="npc" v-for="(desc, id) in npc.description">
-            <LineEdit :editable="$route.query.edit !== undefined && writePermission(npc.permissionWrite)" class="my-5" v-model:value="desc.title" @blur="updateDescription" :remove="() => removeDescription(id)"/>
-            <TextEdit :editable="$route.query.edit !== undefined && writePermission(npc.permissionWrite)" class="my-2" v-model:value="desc.content" @blur="updateDescription"/>
+            <LineEdit :editable="$route.query.edit !== undefined && writePermission(npc.permissionWrite)" class="mt-5" v-model:value="desc.title" @blur="updateDescription" :remove="() => removeDescription(id)"/>
+            <TextEdit :editable="$route.query.edit !== undefined && writePermission(npc.permissionWrite)" class="mb-2 border-l-0" v-model:value="desc.content" @blur="updateDescription"/>
           </div>
           <div v-if="$route.query.edit !== undefined && writePermission(npc.permissionWrite)" @click="npc.description.push({title: 'New Section', content: ''})" class="w-full text-center bg-gray-50 text-gray-900 border shadow py-2 mt-5"><font-awesome-icon size="2x" icon="plus" /></div>
         </div>
